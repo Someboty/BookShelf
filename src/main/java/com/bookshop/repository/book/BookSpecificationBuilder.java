@@ -20,30 +20,27 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     @Override
     public Specification<Book> build(BookSearchParameters bookSearchParameters) {
         Specification<Book> specification = Specification.where(null);
-        if (bookSearchParameters.titles() != null
-                && bookSearchParameters.titles().length > 0) {
-            specification = specification.and(bookSpecificationProviderManager
-                    .getSpecificationProvider(TITLE_KEY)
-                    .getSpecification(bookSearchParameters.titles()));
+        if (isParameterPresent(bookSearchParameters.titles())) {
+            addSpecification(specification, TITLE_KEY, bookSearchParameters.titles());
         }
-        if (bookSearchParameters.authors() != null
-                && bookSearchParameters.authors().length > 0) {
-            specification = specification.and(bookSpecificationProviderManager
-                    .getSpecificationProvider(AUTHOR_KEY)
-                    .getSpecification(bookSearchParameters.authors()));
+        if (isParameterPresent(bookSearchParameters.authors())) {
+            addSpecification(specification, AUTHOR_KEY, bookSearchParameters.authors());
         }
-        if (bookSearchParameters.isbn() != null
-                && bookSearchParameters.isbn().length > 0) {
-            specification = specification.and(bookSpecificationProviderManager
-                    .getSpecificationProvider(ISBN_KEY)
-                    .getSpecification(bookSearchParameters.isbn()));
+        if (isParameterPresent(bookSearchParameters.isbn())) {
+            addSpecification(specification, ISBN_KEY, bookSearchParameters.isbn());
         }
-        if (bookSearchParameters.price() != null
-                && bookSearchParameters.price().length > 0) {
-            specification = specification.and(bookSpecificationProviderManager
-                    .getSpecificationProvider(PRICE_KEY)
-                    .getSpecification(bookSearchParameters.price()));
+        if (isParameterPresent(bookSearchParameters.price())) {
+            addSpecification(specification, PRICE_KEY, bookSearchParameters.price());
         }
         return specification;
+    }
+
+    private boolean isParameterPresent(String[] param) {
+        return param != null && param.length > 0;
+    }
+
+    private void addSpecification(Specification<Book> specification, String key, String[] params) {
+        specification.and(bookSpecificationProviderManager
+                .getSpecificationProvider(key).getSpecification(params));
     }
 }
