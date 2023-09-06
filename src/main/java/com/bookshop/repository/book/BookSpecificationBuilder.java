@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
+    private static final String TITLE_KEY = "title";
+    private static final String AUTHOR_KEY = "author";
+    private static final String ISBN_KEY = "isbn";
+    private static final String PRICE_KEY = "price";
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
     @Override
@@ -19,25 +23,25 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
         if (bookSearchParameters.titles() != null
                 && bookSearchParameters.titles().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("title")
+                    .getSpecificationProvider(TITLE_KEY)
                     .getSpecification(bookSearchParameters.titles()));
         }
         if (bookSearchParameters.authors() != null
                 && bookSearchParameters.authors().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("author")
+                    .getSpecificationProvider(AUTHOR_KEY)
                     .getSpecification(bookSearchParameters.authors()));
         }
         if (bookSearchParameters.isbn() != null
                 && bookSearchParameters.isbn().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("isbn")
+                    .getSpecificationProvider(ISBN_KEY)
                     .getSpecification(bookSearchParameters.isbn()));
         }
         if (bookSearchParameters.price() != null
                 && bookSearchParameters.price().length > 0) {
             specification = specification.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("price")
+                    .getSpecificationProvider(PRICE_KEY)
                     .getSpecification(bookSearchParameters.price()));
         }
         return specification;
