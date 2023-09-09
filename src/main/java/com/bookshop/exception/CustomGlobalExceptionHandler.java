@@ -1,9 +1,8 @@
 package com.bookshop.exception;
 
+import com.bookshop.model.ExceptionBody;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,21 +23,20 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
-        Map<String, Object> body = createBodyMapWithTime();
-        body.put("status", HttpStatus.BAD_REQUEST);
-        List<String> errors = ex.getBindingResult().getAllErrors().stream()
-                .map(this::getErrorMessage)
-                .toList();
-        body.put("errors", errors);
+        ExceptionBody body = new ExceptionBody(LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
+                ex.getBindingResult().getAllErrors().stream()
+                        .map(this::getErrorMessage)
+                        .toList());
         return new ResponseEntity<>(body, headers, status);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFound(
             EntityNotFoundException ex) {
-        Map<String, Object> body = createBodyMapWithTime();
-        body.put("status", HttpStatus.NOT_FOUND);
-        body.put("errors", ex.getMessage());
+        ExceptionBody body = new ExceptionBody(LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
+                List.of(ex.getMessage()));
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
