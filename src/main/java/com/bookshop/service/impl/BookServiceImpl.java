@@ -51,7 +51,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
-        checkIsPresent(id);
+        bookById(id);
         bookRepository.deleteById(id);
     }
 
