@@ -39,11 +39,11 @@ public class BookController {
     private static final String CODE_204 = "204";
     private static final String DELETED_BOOK_DESCRIPTION = "Book deleted successfully";
     private static final String CODE_400 = "400";
-    private static final String CODE_400_DESCRIPTION = "Incorrect data was provided in the body";
+    private static final String CODE_400_DESCRIPTION = "Incorrect data was provided to the body";
     private static final String CODE_400_EXAMPLE =
             """
             {
-                "timestamp": "2023-09-08T02:34:40.8612831",
+                "timestamp": "*time of query*",
                 "status": "BAD_REQUEST",
                 "errors": [
                     "title can't be null, should be set"
@@ -73,18 +73,6 @@ public class BookController {
                     ]
                 }
             """;
-    private static final String BOOK_DTO_EXAMPLE =
-            """
-                {
-                  "id": 0,
-                  "title": "string",
-                  "author": "string",
-                  "isbn": "978-3-16-148410-1",
-                  "price": 0,
-                  "description": "string",
-                  "coverImage": "string"
-                }
-            """;
     private static final String MEDIA_TYPE = "application/json";
     private final BookService bookService;
 
@@ -92,11 +80,7 @@ public class BookController {
     @Operation(summary = "Get list of all books",
             description = "Returns a list of books based on the provided paging information")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = GET_LIST_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = BOOK_DTO_EXAMPLE)}
-                    )}
-            ),
+        @ApiResponse(responseCode = CODE_200, description = GET_LIST_DESCRIPTION),
         @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
@@ -110,11 +94,7 @@ public class BookController {
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id", description = "Return book with certain id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = GET_BOOK_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = BOOK_DTO_EXAMPLE)}
-                    )}
-            ),
+        @ApiResponse(responseCode = CODE_200, description = GET_BOOK_DESCRIPTION),
         @ApiResponse(responseCode = CODE_404, description = CODE_404_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_404_EXAMPLE)}
@@ -135,11 +115,7 @@ public class BookController {
     @Operation(summary = "Create a new book",
             description = "Creates a new book based on data, provided in the body")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_201, description = CREATED_BOOK_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = BOOK_DTO_EXAMPLE)}
-                    )}
-            ),
+        @ApiResponse(responseCode = CODE_201, description = CREATED_BOOK_DESCRIPTION),
         @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
@@ -159,11 +135,7 @@ public class BookController {
     @Operation(summary = "Update a book by id",
                 description = "Updates a book with certain id, based on data, provided in the body")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = UPDATE_BOOK_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = BOOK_DTO_EXAMPLE)}
-                    )}
-            ),
+        @ApiResponse(responseCode = CODE_200, description = UPDATE_BOOK_DESCRIPTION),
         @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
@@ -205,11 +177,7 @@ public class BookController {
             description = "Returns a list of books that match the specified parameters "
                     + "received in the request body, based on the provided paging information")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = GET_LIST_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = BOOK_DTO_EXAMPLE)}
-                    )}
-            ),
+        @ApiResponse(responseCode = CODE_200, description = GET_LIST_DESCRIPTION),
         @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
