@@ -1,4 +1,4 @@
-package com.bookshop.model;
+package com.bookshop.exception;
 
 import java.time.LocalDateTime;
 import java.util.List;

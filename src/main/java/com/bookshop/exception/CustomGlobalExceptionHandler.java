@@ -1,6 +1,5 @@
 package com.bookshop.exception;
 
-import com.bookshop.model.ExceptionBody;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.http.HttpHeaders;

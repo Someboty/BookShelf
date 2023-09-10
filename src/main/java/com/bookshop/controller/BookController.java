@@ -1,8 +1,8 @@
 package com.bookshop.controller;
 
-import com.bookshop.dto.BookDto;
-import com.bookshop.dto.BookSearchParameters;
-import com.bookshop.dto.CreateBookRequestDto;
+import com.bookshop.dto.book.BookDto;
+import com.bookshop.dto.book.BookSearchParameters;
+import com.bookshop.dto.book.CreateBookRequestDto;
 import com.bookshop.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Books", description = "Operations related to books")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/books")
 public class BookController {
     private static final String CODE_200 = "200";
     private static final String GET_LIST_DESCRIPTION = "List of books retrieved successfully";
