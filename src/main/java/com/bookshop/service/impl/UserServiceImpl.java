@@ -18,6 +18,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private static final int EMAIL_INDEX = 1;
+    private static final int ROLE_INDEX = 2;
+    private static final int QUOTES_LENGTH = 1;
+    private static final String PARTS_SEPARATOR = ":";
+    private static final String QUOTES = "\"";
+
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final UserRoleRepository userRoleRepository;
@@ -61,26 +67,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteByEmail(String email) {
-        userRepository.deleteById(userRepository.findByEmail(prepareEmail(email))
-                .orElseThrow(
-                    () -> new NoSuchElementException(
-                            "Can't find user with email: " + prepareEmail(email)))
-                .getId());
+        userRepository.deleteById(findByEmail(email).getId());
     }
 
-    private User findByEmail(String email) throws RegistrationException {
+    private User findByEmail(String email) throws NoSuchElementException {
         return userRepository.findByEmail(email)
                 .orElseThrow(
-                        () -> new RegistrationException("Can't find user by email " + email));
+                        () -> new NoSuchElementException("Can't find user by email " + email));
     }
 
     private String prepareEmail(String query) {
-        String[] values = query.split(":");
-        return values[1].substring(1, values[1].substring(1).indexOf("\"") + 1);
+        String[] values = query.split(PARTS_SEPARATOR);
+        return values[EMAIL_INDEX].substring(
+                QUOTES_LENGTH,
+                values[EMAIL_INDEX].substring(QUOTES_LENGTH).indexOf(QUOTES) + QUOTES_LENGTH);
     }
 
     private String prepareRole(String query) {
-        String[] values = query.split(":");
-        return values[2].substring(1, values[2].substring(1).indexOf("\"") + 1);
+        String[] values = query.split(PARTS_SEPARATOR);
+        return values[ROLE_INDEX].substring(
+                QUOTES_LENGTH,
+                values[ROLE_INDEX].substring(QUOTES_LENGTH).indexOf(QUOTES) + QUOTES_LENGTH);
     }
 }

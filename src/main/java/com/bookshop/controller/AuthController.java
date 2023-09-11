@@ -28,23 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
-    private static final String CODE_200 = "200";
-    private static final String TOKEN_GENERATED_DESCRIPTION =
-            "JWT token was generated successfully";
-    private static final String REGISTRATION_SUCCESSFUL =
-            "registration was successful";
-    private static final String CODE_204 = "204";
-    private static final String DELETED_USER_DESCRIPTION = "User deleted successfully";
-    private static final String ROLE_SET = "role was set to the user";
-    private static final String CODE_401 = "401";
-    private static final String CODE_401_DESCRIPTION =
-            "User should be authenticated to do that operation";
-    private static final String CODE_403 = "403";
-    private static final String CODE_403_DESCRIPTION =
-            "Only users with role \"ADMIN\" can do such operation";
-    private static final String CODE_500 = "500";
-    private static final String CODE_500_DESCRIPTION = "Internal server error";
-    private static final String INCORRECT_DATA =
+    private static final String INCORRECT_DATA_MESSAGE =
             """
                 {
                     "timestamp": "*time of event*",
@@ -54,20 +38,20 @@ public class AuthController {
                     ]
                 }
             """;
-    private static final String MEDIA_TYPE = "application/json";
 
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = TOKEN_GENERATED_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = INCORRECT_DATA)}
+        @ApiResponse(responseCode = "200",
+                description = "JWT token was generated successfully",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = INCORRECT_DATA_MESSAGE)}
                     )}
             ),
-        @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = INCORRECT_DATA)}
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = INCORRECT_DATA_MESSAGE)}
                     )}
             )
     })
@@ -80,10 +64,10 @@ public class AuthController {
     }
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = REGISTRATION_SUCCESSFUL),
-        @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = INCORRECT_DATA)}
+        @ApiResponse(responseCode = "200", description = "registration was successful"),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = INCORRECT_DATA_MESSAGE)}
                     )}
             )
     })
@@ -96,12 +80,14 @@ public class AuthController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = CODE_200, description = ROLE_SET),
-            @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
-            @ApiResponse(responseCode = CODE_403, description = CODE_403_DESCRIPTION),
-            @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-                    content = {@Content(mediaType = MEDIA_TYPE,
-                            examples = {@ExampleObject(value = INCORRECT_DATA)}
+            @ApiResponse(responseCode = "200", description = "role was set to the user"),
+            @ApiResponse(responseCode = "401",
+                    description = "User should be authenticated to do that operation"),
+            @ApiResponse(responseCode = "403",
+                    description = "Only users with role \"ADMIN\" can do such operation"),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json",
+                            examples = {@ExampleObject(value = INCORRECT_DATA_MESSAGE)}
                             )}
                     )
     })
@@ -115,12 +101,14 @@ public class AuthController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = CODE_204, description = DELETED_USER_DESCRIPTION),
-            @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
-            @ApiResponse(responseCode = CODE_403, description = CODE_403_DESCRIPTION),
-            @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-                    content = {@Content(mediaType = MEDIA_TYPE,
-                            examples = {@ExampleObject(value = INCORRECT_DATA)}
+            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "401",
+                    description = "User should be authenticated to do that operation"),
+            @ApiResponse(responseCode = "403",
+                    description = "Only users with role \"ADMIN\" can do such operation"),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json",
+                            examples = {@ExampleObject(value = INCORRECT_DATA_MESSAGE)}
                             )}
                     ),
     })
