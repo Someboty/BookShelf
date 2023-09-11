@@ -31,36 +31,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/books")
 public class BookController {
-    private static final String CODE_200 = "200";
-    private static final String GET_LIST_DESCRIPTION = "List of books retrieved successfully";
-    private static final String GET_BOOK_DESCRIPTION = "Book by id retrieved successfully";
-    private static final String UPDATE_BOOK_DESCRIPTION = "Book updated successfully";
-    private static final String CODE_201 = "201";
-    private static final String CREATED_BOOK_DESCRIPTION = "Book created successfully";
-    private static final String CODE_204 = "204";
-    private static final String DELETED_BOOK_DESCRIPTION = "Book deleted successfully";
-    private static final String CODE_400 = "400";
-    private static final String CODE_400_DESCRIPTION = "Incorrect data was provided to the body";
-    private static final String CODE_400_EXAMPLE =
+    private static final String BAD_REQUEST_EXAMPLE =
             """
             {
                 "timestamp": "*time of query*",
                 "status": "BAD_REQUEST",
                 "errors": [
-                    "title can't be null, should be set"
+                    "*problem description*"
                 ]
             }
             """;
-    private static final String CODE_401 = "401";
-    private static final String CODE_401_DESCRIPTION =
-            "User should be authenticated to do that operation";
-    private static final String CODE_403 = "403";
-    private static final String CODE_403_DESCRIPTION =
-            "Only users with role \"MANAGER\" can do such operation";
-    private static final String CODE_404 = "404";
-    private static final String CODE_404_DESCRIPTION =
-            "Book with such id doesn't exists or was previously deleted";
-    private static final String CODE_404_EXAMPLE =
+    private static final String BOOK_NOT_FOUND_EXAMPLE =
             """          
                 {
                     "timestamp": "*time of query*",
@@ -68,27 +49,16 @@ public class BookController {
                     "errors": "Can't find book by id: {id}"
                 }
             """;
-    private static final String CODE_500 = "500";
-    private static final String CODE_500_DESCRIPTION = "Internal server error";
-    private static final String CODE_500_EXAMPLE =
-            """
-                {
-                    "timestamp": "*time of query*",
-                    "status": "BAD_REQUEST",
-                    "errors": [
-                        "*problem description*"
-                    ]
-                }
-            """;
-    private static final String MEDIA_TYPE = "application/json";
+
     private final BookService bookService;
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = GET_LIST_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
+        @ApiResponse(responseCode = "200", description = "List of books retrieved successfully"),
+        @ApiResponse(responseCode = "401",
+                description = "User should be authenticated to do this operation"),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             )
     })
@@ -100,16 +70,18 @@ public class BookController {
     }
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = GET_BOOK_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_404, description = CODE_404_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_404_EXAMPLE)}
+        @ApiResponse(responseCode = "200", description = "Book by id retrieved successfully"),
+        @ApiResponse(responseCode = "401",
+                description = "User should be authenticated to do this operation"),
+        @ApiResponse(responseCode = "404",
+                description = "Book with such id doesn't exists or was previously deleted",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BOOK_NOT_FOUND_EXAMPLE)}
                     )}
             ),
-        @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
     })
@@ -120,17 +92,19 @@ public class BookController {
     }
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_201, description = CREATED_BOOK_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
+        @ApiResponse(responseCode = "201", description = "Book created successfully"),
+        @ApiResponse(responseCode = "400", description = "Incorrect data was provided to the body",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
-        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_403, description = CODE_403_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
+        @ApiResponse(responseCode = "401",
+                description = "User should be authenticated to do this operation"),
+        @ApiResponse(responseCode = "403",
+                description = "Only users with role \"MANAGER\" can do such operation"),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
     })
@@ -144,17 +118,20 @@ public class BookController {
     }
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = UPDATE_BOOK_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
+        @ApiResponse(responseCode = "200", description = "Book updated successfully"),
+        @ApiResponse(responseCode = "400",
+                description = "Incorrect data was provided to the body",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
-        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_403, description = CODE_403_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
+        @ApiResponse(responseCode = "401",
+                description = "User should be authenticated to do this operation"),
+        @ApiResponse(responseCode = "403",
+                description = "Only users with role \"MANAGER\" can do such operation"),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
     })
@@ -168,17 +145,20 @@ public class BookController {
     }
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_204, description = DELETED_BOOK_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_403, description = CODE_403_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_404, description = CODE_404_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_404_EXAMPLE)}
+        @ApiResponse(responseCode = "204", description = "Book deleted successfully"),
+        @ApiResponse(responseCode = "401",
+                description = "User should be authenticated to do this operation"),
+        @ApiResponse(responseCode = "403",
+                description = "Only users with role \"MANAGER\" can do such operation"),
+        @ApiResponse(responseCode = "404",
+                description = "Book with such id doesn't exists or was previously deleted",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BOOK_NOT_FOUND_EXAMPLE)}
                     )}
             ),
-        @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
     })
@@ -191,16 +171,19 @@ public class BookController {
     }
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = CODE_200, description = GET_LIST_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
+        @ApiResponse(responseCode = "200",
+                description = "List of books retrieved successfully"),
+        @ApiResponse(responseCode = "400",
+                description = "Incorrect data was provided to the body",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
-        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
-        @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
-            content = {@Content(mediaType = MEDIA_TYPE,
-                    examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
+        @ApiResponse(responseCode = "401",
+                description = "User should be authenticated to do this operation"),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = {@Content(mediaType = "application/json",
+                    examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
     })
