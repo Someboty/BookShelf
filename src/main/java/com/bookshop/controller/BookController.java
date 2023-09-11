@@ -15,6 +15,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,6 +51,12 @@ public class BookController {
                 ]
             }
             """;
+    private static final String CODE_401 = "401";
+    private static final String CODE_401_DESCRIPTION =
+            "User should be authenticated to do that operation";
+    private static final String CODE_403 = "403";
+    private static final String CODE_403_DESCRIPTION =
+            "Only users with role \"MANAGER\" can do such operation";
     private static final String CODE_404 = "404";
     private static final String CODE_404_DESCRIPTION =
             "Book with such id doesn't exists or was previously deleted";
@@ -76,25 +83,25 @@ public class BookController {
     private static final String MEDIA_TYPE = "application/json";
     private final BookService bookService;
 
-    @GetMapping
-    @Operation(summary = "Get list of all books",
-            description = "Returns a list of books based on the provided paging information")
     @ApiResponses(value = {
         @ApiResponse(responseCode = CODE_200, description = GET_LIST_DESCRIPTION),
+        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
         @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
                     )}
             )
     })
+    @GetMapping
+    @Operation(summary = "Get list of all books",
+            description = "Returns a list of books based on the provided paging information")
     public List<BookDto> getAll(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get book by id", description = "Return book with certain id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = CODE_200, description = GET_BOOK_DESCRIPTION),
+        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
         @ApiResponse(responseCode = CODE_404, description = CODE_404_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_404_EXAMPLE)}
@@ -106,14 +113,12 @@ public class BookController {
                     )}
             ),
     })
+    @GetMapping("/{id}")
+    @Operation(summary = "Get book by id", description = "Return book with certain id")
     public BookDto getById(@PathVariable Long id) {
         return bookService.getById(id);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a new book",
-            description = "Creates a new book based on data, provided in the body")
     @ApiResponses(value = {
         @ApiResponse(responseCode = CODE_201, description = CREATED_BOOK_DESCRIPTION),
         @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
@@ -121,19 +126,23 @@ public class BookController {
                     examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
                     )}
             ),
+        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
+        @ApiResponse(responseCode = CODE_403, description = CODE_403_DESCRIPTION),
         @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
                     )}
             ),
     })
+    @Operation(summary = "Create a new book",
+            description = "Creates a new book based on data, provided in the body")
+    @PostMapping
+    @PreAuthorize("hasRole('MANAGER')")
+    @ResponseStatus(HttpStatus.CREATED)
     public BookDto create(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
-    @PutMapping("/{id}")
-    @Operation(summary = "Update a book by id",
-                description = "Updates a book with certain id, based on data, provided in the body")
     @ApiResponses(value = {
         @ApiResponse(responseCode = CODE_200, description = UPDATE_BOOK_DESCRIPTION),
         @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
@@ -141,22 +150,27 @@ public class BookController {
                     examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
                     )}
             ),
+        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
+        @ApiResponse(responseCode = CODE_403, description = CODE_403_DESCRIPTION),
         @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
                     )}
             ),
     })
+    @Operation(summary = "Update a book by id",
+            description = "Updates a book with certain id, based on data, provided in the body")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PutMapping("/{id}")
     public BookDto update(@PathVariable Long id,
                                   @RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.update(id, requestDto);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete a book by id", description = "Deletes a book with certain id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = CODE_204, description = DELETED_BOOK_DESCRIPTION),
+        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
+        @ApiResponse(responseCode = CODE_403, description = CODE_403_DESCRIPTION),
         @ApiResponse(responseCode = CODE_404, description = CODE_404_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_404_EXAMPLE)}
@@ -168,14 +182,14 @@ public class BookController {
                     )}
             ),
     })
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a book by id", description = "Deletes a book with certain id")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
         bookService.deleteById(id);
     }
 
-    @GetMapping("/search")
-    @Operation(summary = "Get books with params",
-            description = "Returns a list of books that match the specified parameters "
-                    + "received in the request body, based on the provided paging information")
     @ApiResponses(value = {
         @ApiResponse(responseCode = CODE_200, description = GET_LIST_DESCRIPTION),
         @ApiResponse(responseCode = CODE_400, description = CODE_400_DESCRIPTION,
@@ -183,12 +197,17 @@ public class BookController {
                     examples = {@ExampleObject(value = CODE_400_EXAMPLE)}
                     )}
             ),
+        @ApiResponse(responseCode = CODE_401, description = CODE_401_DESCRIPTION),
         @ApiResponse(responseCode = CODE_500, description = CODE_500_DESCRIPTION,
             content = {@Content(mediaType = MEDIA_TYPE,
                     examples = {@ExampleObject(value = CODE_500_EXAMPLE)}
                     )}
             ),
     })
+    @GetMapping("/search")
+    @Operation(summary = "Get books with params",
+            description = "Returns a list of books that match the specified parameters "
+                    + "received in the request body, based on the provided paging information")
     public List<BookDto> search(BookSearchParameters bookSearchParameters, Pageable pageable) {
         return bookService.search(bookSearchParameters, pageable);
     }
