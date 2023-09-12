@@ -10,9 +10,11 @@ import java.math.BigDecimal;
 public record CreateBookRequestDto(
         @NotNull(message = "title can't be null, should be set")
         @Size(min = 1, max = 255, message = "title should be between 1 and 255 characters")
+        @Schema(example = "title")
         String title,
         @NotNull(message = "author cannot be null, should be set")
         @Size(min = 1, max = 255, message = "author should be between 1 and 255 characters")
+        @Schema(example = "author")
         String author,
         @Isbn
         @NotNull(message = "ISBN cannot be null, should be set")
@@ -21,9 +23,12 @@ public record CreateBookRequestDto(
         String isbn,
         @NotNull(message = "price cannot be null, should be set")
         @Min(value = 0, message = "price cannot be less than 0")
+        @Schema(example = "12.99")
         BigDecimal price,
         @Size(max = 255, message = "description should be less than 255 characters")
+        @Schema(example = "some description of the book")
         String description,
         @Size(max = 255, message = "coverImage should be less than 255 characters")
+        @Schema(example = "imageHolder.com\\url")
         String coverImage) {
 }

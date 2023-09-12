@@ -1,5 +1,6 @@
 package com.bookshop.model;
 
+import com.bookshop.res.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

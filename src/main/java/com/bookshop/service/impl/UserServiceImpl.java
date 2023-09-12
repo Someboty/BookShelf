@@ -2,12 +2,14 @@ package com.bookshop.service.impl;
 
 import com.bookshop.dto.user.UserRegistrationRequestDto;
 import com.bookshop.dto.user.UserRegistrationResponseDto;
+import com.bookshop.dto.user.UserRegistrationRoleRequestDto;
+import com.bookshop.dto.user.UserRegistrationRoleResponseDto;
 import com.bookshop.exception.RegistrationException;
 import com.bookshop.mapper.UserMapper;
 import com.bookshop.model.User;
-import com.bookshop.model.UserRole;
 import com.bookshop.repository.user.UserRepository;
 import com.bookshop.repository.user.UserRoleRepository;
+import com.bookshop.res.UserRole;
 import com.bookshop.service.UserService;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -21,8 +23,8 @@ public class UserServiceImpl implements UserService {
     private static final int EMAIL_INDEX = 1;
     private static final int ROLE_INDEX = 2;
     private static final int QUOTES_LENGTH = 1;
-    private static final String PARTS_SEPARATOR = ":";
     private static final String QUOTES = "\"";
+    private static final String QUERY_SEPARATOR = ":";
 
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
@@ -33,24 +35,63 @@ public class UserServiceImpl implements UserService {
     public UserRegistrationResponseDto register(
             UserRegistrationRequestDto request)
             throws RegistrationException {
-        if (userRepository.findByEmail(request.email()).isPresent()) {
+        if (isExists(request)) {
             throw new RegistrationException("Unable to complete registration");
         }
-        User user = new User();
-        user.setEmail(request.email());
+        User user = userMapper.toModel(request);
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setFirstName(request.firstName());
-        user.setLastName(request.lastName());
-        user.setShippingAddress(request.shippingAddress());
         user.setRoles(Set.of(userRoleRepository.getUserRoleByName(UserRole.RoleName.ROLE_USER)));
         return userMapper.toResponse(userRepository.save(user));
     }
 
     @Override
-    public UserRegistrationResponseDto setAsRole(String query) throws RegistrationException {
-        User user = findByEmail(prepareEmail(query));
-        String role = prepareRole(query);
-        switch (role) {
+    public UserRegistrationRoleResponseDto registerWithRole(UserRegistrationRoleRequestDto request)
+            throws RegistrationException {
+        UserRegistrationRequestDto userDto = userMapper.toStandardModel(request);
+        User user = userMapper.toModel(userDto);
+        setRoles(user, request.role());
+        return userMapper.toRegistrationResponse(userRepository.save(user));
+    }
+
+    @Override
+    public UserRegistrationRoleResponseDto setAsRole(String query) throws RegistrationException {
+        User user = findByEmail(query);
+        String roles = prepareRole(query);
+        setRoles(user, roles);
+        return userMapper.toRegistrationResponse(userRepository.save(user));
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+        userRepository.deleteById(findByEmail(email).getId());
+    }
+
+    private boolean isExists(UserRegistrationRequestDto request) {
+        return userRepository.findByEmail(request.email()).isPresent();
+    }
+
+    private User findByEmail(String email) {
+        return userRepository.findByEmail(prepareEmail(email))
+                .orElseThrow(
+                        () -> new NoSuchElementException("Can't find user by email " + email));
+    }
+
+    private String prepareEmail(String query) {
+        String[] values = query.split(QUERY_SEPARATOR);
+        return values[EMAIL_INDEX].substring(
+                QUOTES_LENGTH,
+                values[EMAIL_INDEX].substring(QUOTES_LENGTH).indexOf(QUOTES) + QUOTES_LENGTH);
+    }
+
+    private String prepareRole(String query) {
+        String[] values = query.split(QUERY_SEPARATOR);
+        return values[ROLE_INDEX].substring(
+                QUOTES_LENGTH,
+                values[ROLE_INDEX].substring(QUOTES_LENGTH).indexOf(QUOTES) + QUOTES_LENGTH);
+    }
+
+    private void setRoles(User user, String roles) throws RegistrationException {
+        switch (roles) {
             case ("admin") -> user.setRoles(Set.of(userRoleRepository
                             .getUserRoleByName(UserRole.RoleName.ROLE_USER),
                     userRoleRepository.getUserRoleByName(UserRole.RoleName.ROLE_MANAGER),
@@ -60,33 +101,7 @@ public class UserServiceImpl implements UserService {
                     userRoleRepository.getUserRoleByName(UserRole.RoleName.ROLE_MANAGER)));
             case ("user") -> user.setRoles(Set.of(userRoleRepository
                     .getUserRoleByName(UserRole.RoleName.ROLE_USER)));
-            default -> throw new RegistrationException("Incorrect role: " + role);
+            default -> throw new RegistrationException("Incorrect role: " + roles);
         }
-        return userMapper.toResponse(userRepository.save(user));
-    }
-
-    @Override
-    public void deleteByEmail(String email) {
-        userRepository.deleteById(findByEmail(email).getId());
-    }
-
-    private User findByEmail(String email) throws NoSuchElementException {
-        return userRepository.findByEmail(email)
-                .orElseThrow(
-                        () -> new NoSuchElementException("Can't find user by email " + email));
-    }
-
-    private String prepareEmail(String query) {
-        String[] values = query.split(PARTS_SEPARATOR);
-        return values[EMAIL_INDEX].substring(
-                QUOTES_LENGTH,
-                values[EMAIL_INDEX].substring(QUOTES_LENGTH).indexOf(QUOTES) + QUOTES_LENGTH);
-    }
-
-    private String prepareRole(String query) {
-        String[] values = query.split(PARTS_SEPARATOR);
-        return values[ROLE_INDEX].substring(
-                QUOTES_LENGTH,
-                values[ROLE_INDEX].substring(QUOTES_LENGTH).indexOf(QUOTES) + QUOTES_LENGTH);
     }
 }
