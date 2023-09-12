@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-roles
+      author: Vladyslav Ihnatiuk
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column: {name: role, value: "0"}
+        - insert:
+            tableName: roles
+            columns:
+              - column: {name: role, value: "1"}
+        - insert:
+            tableName: roles
+            columns:
+              - column: {name: role, value: "2"}
