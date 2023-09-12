@@ -55,7 +55,8 @@ public class BookController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "List of books retrieved successfully"),
         @ApiResponse(responseCode = "401",
-                description = "User should be authenticated to do this operation"),
+            description = "User should be authenticated to do this operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = {@Content(mediaType = "application/json",
                     examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
@@ -72,9 +73,10 @@ public class BookController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Book by id retrieved successfully"),
         @ApiResponse(responseCode = "401",
-                description = "User should be authenticated to do this operation"),
+            description = "User should be authenticated to do this operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "404",
-                description = "Book with such id doesn't exists or was previously deleted",
+            description = "Book with such id doesn't exists or was previously deleted",
             content = {@Content(mediaType = "application/json",
                     examples = {@ExampleObject(value = BOOK_NOT_FOUND_EXAMPLE)}
                     )}
@@ -99,9 +101,11 @@ public class BookController {
                     )}
             ),
         @ApiResponse(responseCode = "401",
-                description = "User should be authenticated to do this operation"),
+            description = "User should be authenticated to do this operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "403",
-                description = "Only users with role \"MANAGER\" can do such operation"),
+            description = "Only users with role \"MANAGER\" can do such operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = {@Content(mediaType = "application/json",
                     examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
@@ -120,15 +124,17 @@ public class BookController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Book updated successfully"),
         @ApiResponse(responseCode = "400",
-                description = "Incorrect data was provided to the body",
+            description = "Incorrect data was provided to the body",
             content = {@Content(mediaType = "application/json",
                     examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
         @ApiResponse(responseCode = "401",
-                description = "User should be authenticated to do this operation"),
+            description = "User should be authenticated to do this operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "403",
-                description = "Only users with role \"MANAGER\" can do such operation"),
+            description = "Only users with role \"MANAGER\" can do such operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = {@Content(mediaType = "application/json",
                     examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
@@ -147,11 +153,13 @@ public class BookController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Book deleted successfully"),
         @ApiResponse(responseCode = "401",
-                description = "User should be authenticated to do this operation"),
+            description = "User should be authenticated to do this operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "403",
-                description = "Only users with role \"MANAGER\" can do such operation"),
+            description = "Only users with role \"MANAGER\" can do such operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "404",
-                description = "Book with such id doesn't exists or was previously deleted",
+            description = "Book with such id doesn't exists or was previously deleted",
             content = {@Content(mediaType = "application/json",
                     examples = {@ExampleObject(value = BOOK_NOT_FOUND_EXAMPLE)}
                     )}
@@ -172,15 +180,16 @@ public class BookController {
 
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
-                description = "List of books retrieved successfully"),
+            description = "List of books retrieved successfully"),
         @ApiResponse(responseCode = "400",
-                description = "Incorrect data was provided to the body",
+            description = "Incorrect data was provided to the body",
             content = {@Content(mediaType = "application/json",
                     examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                     )}
             ),
         @ApiResponse(responseCode = "401",
-                description = "User should be authenticated to do this operation"),
+            description = "User should be authenticated to do this operation",
+            content = {@Content()}),
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = {@Content(mediaType = "application/json",
                     examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
