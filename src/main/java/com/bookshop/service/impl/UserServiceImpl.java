@@ -7,7 +7,7 @@ import com.bookshop.dto.user.UserRegistrationRoleResponseDto;
 import com.bookshop.exception.RegistrationException;
 import com.bookshop.mapper.UserMapper;
 import com.bookshop.model.User;
-import com.bookshop.model.UserRole;
+import com.bookshop.res.UserRole;
 import com.bookshop.repository.user.UserRepository;
 import com.bookshop.repository.user.UserRoleRepository;
 import com.bookshop.service.UserService;

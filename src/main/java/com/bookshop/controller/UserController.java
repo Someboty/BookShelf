@@ -3,6 +3,7 @@ package com.bookshop.controller;
 import com.bookshop.dto.user.UserRegistrationRoleRequestDto;
 import com.bookshop.dto.user.UserRegistrationRoleResponseDto;
 import com.bookshop.exception.RegistrationException;
+import com.bookshop.res.Openapi;
 import com.bookshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,16 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-    private static final String INCORRECT_DATA =
-            """
-                {
-                    "timestamp": "*time of event*",
-                    "status": "INTERNAL_SERVER_ERROR",
-                    "errors": [
-                        "Incorrect user data"
-                    ]
-                }
-            """;
+    private static final String INCORRECT_DATA = Openapi.INCORRECT_DATA;
 
     private final UserService userService;
 

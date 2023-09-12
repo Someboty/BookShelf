@@ -1,6 +1,6 @@
 package com.bookshop.dto.user;
 
-import com.bookshop.model.UserRole;
+import com.bookshop.res.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package com.bookshop.model;
+package com.bookshop.res;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

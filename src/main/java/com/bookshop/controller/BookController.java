@@ -3,6 +3,7 @@ package com.bookshop.controller;
 import com.bookshop.dto.book.BookDto;
 import com.bookshop.dto.book.BookSearchParameters;
 import com.bookshop.dto.book.CreateBookRequestDto;
+import com.bookshop.res.Openapi;
 import com.bookshop.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,24 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/books")
 public class BookController {
-    private static final String BAD_REQUEST_EXAMPLE =
-            """
-            {
-                "timestamp": "*time of query*",
-                "status": "BAD_REQUEST",
-                "errors": [
-                    "*problem description*"
-                ]
-            }
-            """;
-    private static final String BOOK_NOT_FOUND_EXAMPLE =
-            """          
-                {
-                    "timestamp": "*time of query*",
-                    "status": "NOT_FOUND",
-                    "errors": "Can't find book by id: {id}"
-                }
-            """;
+    private static final String BAD_REQUEST_EXAMPLE = Openapi.BAD_REQUEST_EXAMPLE;
+
+    private static final String BOOK_NOT_FOUND_EXAMPLE = Openapi.BOOK_NOT_FOUND_EXAMPLE;
 
     private final BookService bookService;
 

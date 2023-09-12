@@ -5,6 +5,7 @@ import com.bookshop.dto.user.UserLoginResponseDto;
 import com.bookshop.dto.user.UserRegistrationRequestDto;
 import com.bookshop.dto.user.UserRegistrationResponseDto;
 import com.bookshop.exception.RegistrationException;
+import com.bookshop.res.Openapi;
 import com.bookshop.security.AuthenticationService;
 import com.bookshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,16 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
-    private static final String INCORRECT_DATA =
-            """
-                {
-                    "timestamp": "*time of event*",
-                    "status": "INTERNAL_SERVER_ERROR",
-                    "errors": [
-                        "Incorrect user data"
-                    ]
-                }
-            """;
+    private static final String INCORRECT_DATA = Openapi.INCORRECT_DATA;
 
     private final UserService userService;
     private final AuthenticationService authenticationService;
