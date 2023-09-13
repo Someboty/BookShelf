@@ -1,6 +1,6 @@
 package com.bookshop.dto.user;
 
-import com.bookshop.res.UserRole;
+import com.bookshop.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
 
@@ -35,5 +35,5 @@ public record UserRegistrationRoleResponseDto(
                 }
             ]
             """)
-        Set<UserRole> roles) {
+        Set<Role> roles) {
 }

@@ -1,4 +1,4 @@
-package com.bookshop.res;
+package com.bookshop.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class UserRole implements GrantedAuthority {
+public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Users", description = "Controller for operations with users")
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @RestController
@@ -31,7 +33,7 @@ public class UserController {
     private final UserService userService;
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
+        @ApiResponse(responseCode = "201",
             description = "user with defined roles was successfully created"),
         @ApiResponse(responseCode = "401",
             description = "User should be authenticated to do that operation",
@@ -50,6 +52,7 @@ public class UserController {
                     + "provided in the body (standard user + role)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserRegistrationRoleResponseDto registerWithRole(
             @RequestBody UserRegistrationRoleRequestDto request)
             throws RegistrationException {

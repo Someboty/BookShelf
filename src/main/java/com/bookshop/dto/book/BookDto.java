@@ -2,19 +2,24 @@ package com.bookshop.dto.book;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+import java.util.Set;
+import lombok.Data;
 
-public record BookDto(
-        Long id,
-        @Schema(example = "title")
-        String title,
-        @Schema(example = "author")
-        String author,
-        @Schema(example = "978-1569319017")
-        String isbn,
-        @Schema(example = "12.99")
-        BigDecimal price,
-        @Schema(example = "some description of the book")
-        String description,
-        @Schema(example = "imageHolder.com\\url")
-        String coverImage) {
+@Data
+public class BookDto {
+    private Long id;
+    @Schema(example = "title")
+    private String title;
+    @Schema(example = "author")
+    private String author;
+    @Schema(example = "978-1569319017")
+    private String isbn;
+    @Schema(example = "12.99")
+    private BigDecimal price;
+    @Schema(example = "some description of the book")
+    private String description;
+    @Schema(example = "imageHolder.com\\url")
+    private String coverImage;
+    @Schema(example = "comedy")
+    private Set<Long> categoryIds;
 }

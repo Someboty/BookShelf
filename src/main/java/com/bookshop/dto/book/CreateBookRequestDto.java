@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Set;
 
 public record CreateBookRequestDto(
         @NotNull(message = "title can't be null, should be set")
@@ -30,5 +31,6 @@ public record CreateBookRequestDto(
         String description,
         @Size(max = 255, message = "coverImage should be less than 255 characters")
         @Schema(example = "imageHolder.com\\url")
-        String coverImage) {
+        String coverImage,
+        Set<Long> categoryIds) {
 }

@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private static final String BAD_REQUEST_EXAMPLE = Openapi.BAD_REQUEST_EXAMPLE;
 
-    private static final String BOOK_NOT_FOUND_EXAMPLE = Openapi.BOOK_NOT_FOUND_EXAMPLE;
+    private static final String BOOK_NOT_FOUND_EXAMPLE = Openapi.OBJECT_NOT_FOUND_EXAMPLE;
 
     private final BookService bookService;
 
@@ -74,7 +74,7 @@ public class BookController {
             ),
     })
     @GetMapping("/{id}")
-    @Operation(summary = "Get book by id", description = "Return book with certain id")
+    @Operation(summary = "Get book by id", description = "Returns a book with certain id")
     public BookDto getById(@PathVariable Long id) {
         return bookService.getById(id);
     }
