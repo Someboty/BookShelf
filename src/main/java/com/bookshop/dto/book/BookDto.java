@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 public class BookDto {
@@ -21,5 +23,7 @@ public class BookDto {
     @Schema(example = "imageHolder.com\\url")
     private String coverImage;
     @Schema(example = "comedy")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Long> categoryIds;
 }
