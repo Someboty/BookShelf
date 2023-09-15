@@ -33,8 +33,8 @@ public interface BookMapper {
 
     @AfterMapping
     default void setCategories(@MappingTarget Book book, CreateBookRequestDto bookDto) {
-        if (!bookDto.categoryIds().isEmpty()) {
-            book.setCategories(bookDto.categoryIds().stream()
+        if (!bookDto.getCategoryIds().isEmpty()) {
+            book.setCategories(bookDto.getCategoryIds().stream()
                     .map(Category::new)
                     .collect(Collectors.toSet()));
         }

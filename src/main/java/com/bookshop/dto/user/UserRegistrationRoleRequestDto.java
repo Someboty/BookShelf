@@ -1,23 +1,29 @@
 package com.bookshop.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-public record UserRegistrationRoleRequestDto(
-        @Schema(example = "bob@mail.com")
-        String email,
+@Getter
+@Setter
+@EqualsAndHashCode
+public class UserRegistrationRoleRequestDto {
+    @Schema(example = "bob@mail.com")
+    private String email;
 
-        @Schema(example = "qeTuo[246")
-        String password,
+    @Schema(example = "qeTuo[246")
+    private String password;
 
-        @Schema(example = "qeTuo[246")
-        String repeatPassword,
+    @Schema(example = "qeTuo[246")
+    private String repeatPassword;
 
-        @Schema(example = "Bob")
-        String firstName,
+    @Schema(example = "Bob")
+    private String firstName;
 
-        @Schema(example = "Smith")
-        String lastName,
+    @Schema(example = "Smith")
+    private String lastName;
 
-        @Schema(example = "manager")
-        String role) {
+    @Schema(example = "manager")
+    private String role;
 }

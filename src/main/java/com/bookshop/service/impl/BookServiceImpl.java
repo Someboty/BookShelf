@@ -43,12 +43,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto update(Long id, CreateBookRequestDto requestDto) {
         Book book = bookById(id);
-        book.setTitle(requestDto.title());
-        book.setAuthor(requestDto.author());
-        book.setIsbn(requestDto.isbn());
-        book.setPrice(requestDto.price());
-        book.setDescription(requestDto.description());
-        book.setCoverImage(requestDto.coverImage());
+        book.setTitle(requestDto.getTitle());
+        book.setAuthor(requestDto.getAuthor());
+        book.setIsbn(requestDto.getIsbn());
+        book.setPrice(requestDto.getPrice());
+        book.setDescription(requestDto.getDescription());
+        book.setCoverImage(requestDto.getCoverImage());
         bookMapper.setCategories(book, requestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }

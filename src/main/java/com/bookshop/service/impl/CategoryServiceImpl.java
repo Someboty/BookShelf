@@ -37,8 +37,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto update(Long id, CategoryDto categoryDto) {
         Category category = categoryById(id);
-        category.setName(categoryDto.name());
-        category.setDescription(categoryDto.description());
+        category.setName(categoryDto.getName());
+        category.setDescription(categoryDto.getDescription());
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 

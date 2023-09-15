@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("Unable to complete registration");
         }
         User user = userMapper.toModel(request);
-        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(Set.of(roleRepository.getUserRoleByName(Role.RoleName.ROLE_USER)));
         return userMapper.toResponse(userRepository.save(user));
     }
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             throws RegistrationException {
         UserRegistrationRequestDto userDto = userMapper.toStandardModel(request);
         User user = userMapper.toModel(userDto);
-        setRoles(user, request.role());
+        setRoles(user, request.getRole());
         return userMapper.toRegistrationResponse(userRepository.save(user));
     }
 
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isExists(UserRegistrationRequestDto request) {
-        return userRepository.findByEmail(request.email()).isPresent();
+        return userRepository.findByEmail(request.getEmail()).isPresent();
     }
 
     private User findByEmail(String email) {

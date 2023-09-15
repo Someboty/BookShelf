@@ -20,17 +20,17 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     @Override
     public Specification<Book> build(BookSearchParameters bookSearchParameters) {
         Specification<Book> specification = Specification.where(null);
-        if (isParameterPresent(bookSearchParameters.titles())) {
-            addSpecification(specification, TITLE_KEY, bookSearchParameters.titles());
+        if (isParameterPresent(bookSearchParameters.getTitles())) {
+            addSpecification(specification, TITLE_KEY, bookSearchParameters.getTitles());
         }
-        if (isParameterPresent(bookSearchParameters.authors())) {
-            addSpecification(specification, AUTHOR_KEY, bookSearchParameters.authors());
+        if (isParameterPresent(bookSearchParameters.getAuthors())) {
+            addSpecification(specification, AUTHOR_KEY, bookSearchParameters.getAuthors());
         }
-        if (isParameterPresent(bookSearchParameters.isbn())) {
-            addSpecification(specification, ISBN_KEY, bookSearchParameters.isbn());
+        if (isParameterPresent(bookSearchParameters.getIsbn())) {
+            addSpecification(specification, ISBN_KEY, bookSearchParameters.getIsbn());
         }
-        if (isParameterPresent(bookSearchParameters.price())) {
-            addSpecification(specification, PRICE_KEY, bookSearchParameters.price());
+        if (isParameterPresent(bookSearchParameters.getPrice())) {
+            addSpecification(specification, PRICE_KEY, bookSearchParameters.getPrice());
         }
         return specification;
     }

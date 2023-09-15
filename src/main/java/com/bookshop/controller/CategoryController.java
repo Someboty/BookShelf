@@ -110,6 +110,26 @@ public class CategoryController {
         return categoryService.getById(id);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Category updated successfully"),
+            @ApiResponse(responseCode = "400",
+                    description = "Incorrect data was provided to the body",
+                    content = {@Content(mediaType = "application/json",
+                            examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
+                            )}
+            ),
+            @ApiResponse(responseCode = "401",
+                    description = "User should be authenticated to do this operation",
+                    content = {@Content()}),
+            @ApiResponse(responseCode = "403",
+                    description = "Only users with role \"MANAGER\" can do such operation",
+                    content = {@Content()}),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = {@Content(mediaType = "application/json",
+                            examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
+                            )}
+            ),
+    })
     @PreAuthorize("hasRole('MANAGER')")
     @PutMapping("/{id}")
     @Operation(summary = "Update a category by id",

@@ -1,19 +1,25 @@
 package com.bookshop.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-public record UserRegistrationResponseDto(
-        Long id,
+@Getter
+@Setter
+@EqualsAndHashCode
+public class UserRegistrationResponseDto {
+    private Long id;
 
-        @Schema(example = "bob@mail.com")
-        String email,
+    @Schema(example = "bob@mail.com")
+    private String email;
 
-        @Schema(example = "Bob")
-        String firstName,
+    @Schema(example = "Bob")
+    private String firstName;
 
-        @Schema(example = "Smith")
-        String lastName,
+    @Schema(example = "Smith")
+    private String lastName;
 
-        @Schema(example = "Ukraine, Kyiv, Maidan Nezalezhnosti")
-        String shippingAddress) {
+    @Schema(example = "Ukraine, Kyiv, Maidan Nezalezhnosti")
+    private String shippingAddress;
 }
