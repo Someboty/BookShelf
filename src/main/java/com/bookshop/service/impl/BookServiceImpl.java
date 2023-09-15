@@ -25,7 +25,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book entity = bookMapper.toEntity(requestDto);
-        entity.setCategories(bookMapper.mapToCategorySet(requestDto.categoryIds()));
         return bookMapper.toDto(bookRepository.save(entity));
     }
 
@@ -50,7 +49,7 @@ public class BookServiceImpl implements BookService {
         book.setPrice(requestDto.price());
         book.setDescription(requestDto.description());
         book.setCoverImage(requestDto.coverImage());
-        book.setCategories(bookMapper.mapToCategorySet(requestDto.categoryIds()));
+        bookMapper.setCategories(book, requestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
 

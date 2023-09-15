@@ -6,7 +6,6 @@ import com.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.bookshop.dto.book.CreateBookRequestDto;
 import com.bookshop.model.Book;
 import com.bookshop.model.Category;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -32,13 +31,12 @@ public interface BookMapper {
         }
     }
 
-    default Set<Category> mapToCategorySet(Set<Long> categoryIds) {
-        return categoryIds.stream()
-                .map(id -> {
-                    Category category = new Category();
-                    category.setId(id);
-                    return category;
-                })
-                .collect(Collectors.toSet());
+    @AfterMapping
+    default void setCategories(@MappingTarget Book book, CreateBookRequestDto bookDto) {
+        if (!bookDto.categoryIds().isEmpty()) {
+            book.setCategories(bookDto.categoryIds().stream()
+                    .map(Category::new)
+                    .collect(Collectors.toSet()));
+        }
     }
 }
