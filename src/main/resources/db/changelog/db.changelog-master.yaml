@@ -13,3 +13,11 @@ databaseChangeLog:
       file: db/changelog/changes/06-create-categories-table.yaml
   - include:
       file: db/changelog/changes/07-create-books_categories-table.yaml
+  - include:
+      file: db/changelog/changes/08-insert-category-example.yaml
+  - include:
+      file: db/changelog/changes/09-insert-book-example.yaml
+  - include:
+      file: db/changelog/changes/10-insert-admin-user.yaml
+  - include:
+      file: db/changelog/changes/11-create-items-table.yaml
