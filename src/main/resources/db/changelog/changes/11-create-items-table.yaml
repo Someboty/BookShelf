@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-items-table
+      author: Vladyslav Ihnatiuk
+      changes:
+        - createTable:
+              tableName: items
+              columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: cart_id
+                    type: bigint
+                    constraints:
+                      foreignKeyName: user.id
+                      nullable: false
+                - column:
+                    name: bigint
+                    type: varchar(255)
+                    constraints:
+                      foreignKeyName: book.id
+                      nullable: false
+                - column:
+                    name: quantity
+                    type: int
+                    constraints:
+                      nullable: false

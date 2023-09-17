@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-category-example
+      author: Vladyslav Ihnatiuk
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column: {name: name, value: "Book"}
+              - column: {name: description, value: "Example of category"}
+              - column: {name: is_deleted, valueBoolean: "false"}
