@@ -14,7 +14,6 @@ import com.bookshop.repository.user.UserRepository;
 import com.bookshop.service.CartService;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,17 +25,17 @@ public class CartServiceImpl implements CartService {
     private final BookMapper bookMapper;
 
     @Override
-    public CartDto getCartInfo(UserDetails userDetails) {
-        ShoppingCart cart = findCart(userDetails);
+    public CartDto getCartInfo(Long userId) {
+        ShoppingCart cart = findCart(userId);
         if (cart == null) {
-            cart = createNewCart(userDetails);
+            cart = createNewCart(userId);
         }
         return cartMapper.toCartDto(cart);
     }
 
     @Override
-    public CartItemDtoResponse createCartItem(UserDetails userDetails, CreateCartItemDto request) {
-        ShoppingCart cart = findCart(userDetails);
+    public CartItemDtoResponse createCartItem(Long userId, CreateCartItemDto request) {
+        ShoppingCart cart = findCart(userId);
         CartItem item = new CartItem();
         item.setShoppingCart(cart);
         item.setBook(bookMapper.bookFromId(request.getBookId()));
@@ -46,21 +45,22 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartItemDtoResponse updateCartItem(UserDetails userDetails, int cartItemId, PutCartItemDto quantity) {
+    public CartItemDtoResponse updateCartItem(
+            Long userId,
+            int cartItemId,
+            PutCartItemDto quantity) {
         return null;
     }
 
-    private ShoppingCart findCart(UserDetails userDetails) {
-        return cartRepository.getShoppingCartByUser_Email(
-                userDetails.getUsername());
+    private ShoppingCart findCart(Long userId) {
+        return cartRepository.getShoppingCartByUser_Id(userId);
     }
 
-    private ShoppingCart createNewCart(UserDetails userDetails) {
+    private ShoppingCart createNewCart(Long userId) {
         ShoppingCart cart = new ShoppingCart();
-        String email = userDetails.getUsername();
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NoSuchElementException("Can't find a user with email "
-                        + email));
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NoSuchElementException("Can't find a user with id "
+                        + userId));
         cart.setId(user.getId());
         cart.setUser(user);
         return cart;

@@ -4,5 +4,5 @@ import com.bookshop.model.ShoppingCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CartRepository extends JpaRepository<ShoppingCart, Long> {
-    ShoppingCart getShoppingCartByUser_Email(String email);
+    ShoppingCart getShoppingCartByUser_Id(Long id);
 }
