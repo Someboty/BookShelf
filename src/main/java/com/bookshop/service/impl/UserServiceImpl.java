@@ -6,16 +6,17 @@ import com.bookshop.dto.user.UserRegistrationRoleRequestDto;
 import com.bookshop.dto.user.UserRegistrationRoleResponseDto;
 import com.bookshop.exception.RegistrationException;
 import com.bookshop.mapper.UserMapper;
+import com.bookshop.model.Role;
 import com.bookshop.model.User;
+import com.bookshop.repository.role.RoleRepository;
 import com.bookshop.repository.user.UserRepository;
-import com.bookshop.repository.user.UserRoleRepository;
-import com.bookshop.res.UserRole;
 import com.bookshop.service.UserService;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,32 +29,35 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-    private final UserRoleRepository userRoleRepository;
+    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserRegistrationResponseDto register(
             UserRegistrationRequestDto request)
             throws RegistrationException {
         if (isExists(request)) {
             throw new RegistrationException("Unable to complete registration");
         }
-        User user = userMapper.toModel(request);
-        user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRoles(Set.of(userRoleRepository.getUserRoleByName(UserRole.RoleName.ROLE_USER)));
+        User user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRoles(Set.of(roleRepository.getUserRoleByName(Role.RoleName.ROLE_USER)));
         return userMapper.toResponse(userRepository.save(user));
     }
 
     @Override
+    @Transactional
     public UserRegistrationRoleResponseDto registerWithRole(UserRegistrationRoleRequestDto request)
             throws RegistrationException {
         UserRegistrationRequestDto userDto = userMapper.toStandardModel(request);
-        User user = userMapper.toModel(userDto);
-        setRoles(user, request.role());
+        User user = userMapper.toEntity(userDto);
+        setRoles(user, request.getRole());
         return userMapper.toRegistrationResponse(userRepository.save(user));
     }
 
     @Override
+    @Transactional
     public UserRegistrationRoleResponseDto setAsRole(String query) throws RegistrationException {
         User user = findByEmail(query);
         String roles = prepareRole(query);
@@ -67,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isExists(UserRegistrationRequestDto request) {
-        return userRepository.findByEmail(request.email()).isPresent();
+        return userRepository.findByEmail(request.getEmail()).isPresent();
     }
 
     private User findByEmail(String email) {
@@ -92,15 +96,15 @@ public class UserServiceImpl implements UserService {
 
     private void setRoles(User user, String roles) throws RegistrationException {
         switch (roles) {
-            case ("admin") -> user.setRoles(Set.of(userRoleRepository
-                            .getUserRoleByName(UserRole.RoleName.ROLE_USER),
-                    userRoleRepository.getUserRoleByName(UserRole.RoleName.ROLE_MANAGER),
-                    userRoleRepository.getUserRoleByName(UserRole.RoleName.ROLE_ADMIN)));
-            case ("manager") -> user.setRoles(Set.of(userRoleRepository
-                            .getUserRoleByName(UserRole.RoleName.ROLE_USER),
-                    userRoleRepository.getUserRoleByName(UserRole.RoleName.ROLE_MANAGER)));
-            case ("user") -> user.setRoles(Set.of(userRoleRepository
-                    .getUserRoleByName(UserRole.RoleName.ROLE_USER)));
+            case ("admin") -> user.setRoles(Set.of(roleRepository
+                            .getUserRoleByName(Role.RoleName.ROLE_USER),
+                    roleRepository.getUserRoleByName(Role.RoleName.ROLE_MANAGER),
+                    roleRepository.getUserRoleByName(Role.RoleName.ROLE_ADMIN)));
+            case ("manager") -> user.setRoles(Set.of(roleRepository
+                            .getUserRoleByName(Role.RoleName.ROLE_USER),
+                    roleRepository.getUserRoleByName(Role.RoleName.ROLE_MANAGER)));
+            case ("user") -> user.setRoles(Set.of(roleRepository
+                    .getUserRoleByName(Role.RoleName.ROLE_USER)));
             default -> throw new RegistrationException("Incorrect role: " + roles);
         }
     }

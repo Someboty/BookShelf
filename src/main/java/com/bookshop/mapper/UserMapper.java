@@ -14,7 +14,7 @@ public interface UserMapper {
 
     UserRegistrationRoleResponseDto toRegistrationResponse(User user);
 
-    User toModel(UserRegistrationRequestDto userDto);
+    User toEntity(UserRegistrationRequestDto userDto);
 
     UserRegistrationRequestDto toStandardModel(UserRegistrationRoleRequestDto roleDto);
 

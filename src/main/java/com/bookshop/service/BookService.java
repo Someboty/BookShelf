@@ -1,6 +1,7 @@
 package com.bookshop.service;
 
 import com.bookshop.dto.book.BookDto;
+import com.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.bookshop.dto.book.BookSearchParameters;
 import com.bookshop.dto.book.CreateBookRequestDto;
 import java.util.List;
@@ -18,4 +19,6 @@ public interface BookService {
     void deleteById(Long id);
 
     List<BookDto> search(BookSearchParameters bookSearchParameters, Pageable pageable);
+
+    List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id, Pageable pageable);
 }

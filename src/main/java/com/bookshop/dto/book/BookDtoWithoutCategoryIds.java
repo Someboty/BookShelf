@@ -2,7 +2,6 @@ package com.bookshop.dto.book;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
-import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class BookDto {
+public class BookDtoWithoutCategoryIds {
     private Long id;
     @Schema(example = "title")
     private String title;
@@ -24,7 +23,4 @@ public class BookDto {
     private String description;
     @Schema(example = "imageHolder.com\\url")
     private String coverImage;
-    @Schema(example = "comedy")
-    @EqualsAndHashCode.Exclude
-    private Set<Long> categoryIds;
 }

@@ -11,12 +11,12 @@ public class Openapi {
                 ]
             }
             """;
-    public static final String BOOK_NOT_FOUND_EXAMPLE =
+    public static final String OBJECT_NOT_FOUND_EXAMPLE =
             """          
                 {
                     "timestamp": "*time of query*",
                     "status": "NOT_FOUND",
-                    "errors": "Can't find book by id: {id}"
+                    "errors": "Can't find object by id: {id}"
                 }
             """;
     public static final String INCORRECT_DATA =

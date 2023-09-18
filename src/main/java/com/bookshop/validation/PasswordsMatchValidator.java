@@ -11,7 +11,7 @@ public class PasswordsMatchValidator
     public boolean isValid(
             UserRegistrationRequestDto requestDto,
             ConstraintValidatorContext constraintValidatorContext) {
-        return requestDto.password() != null
-                && requestDto.password().equals(requestDto.repeatPassword());
+        return requestDto.getPassword() != null
+                && requestDto.getPassword().equals(requestDto.getRepeatPassword());
     }
 }
