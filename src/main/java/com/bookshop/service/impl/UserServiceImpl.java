@@ -16,6 +16,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserRegistrationResponseDto register(
             UserRegistrationRequestDto request)
             throws RegistrationException {
@@ -45,6 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserRegistrationRoleResponseDto registerWithRole(UserRegistrationRoleRequestDto request)
             throws RegistrationException {
         UserRegistrationRequestDto userDto = userMapper.toStandardModel(request);
@@ -54,6 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserRegistrationRoleResponseDto setAsRole(String query) throws RegistrationException {
         User user = findByEmail(query);
         String roles = prepareRole(query);

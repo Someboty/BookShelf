@@ -10,11 +10,13 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
                     foreignKeyName: book.id
                     nullable: false
               - column:
                   name: category_id
                   type: bigint
                   constraints:
+                    primaryKey: true
                     foreignKeyName: category.id
                     nullable: false
