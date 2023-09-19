@@ -20,8 +20,8 @@ databaseChangeLog:
                       foreignKeyName: user.id
                       nullable: false
                 - column:
-                    name: bigint
-                    type: varchar(255)
+                    name: book_id
+                    type: bigint
                     constraints:
                       foreignKeyName: book.id
                       nullable: false

@@ -6,6 +6,7 @@ import com.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.bookshop.dto.book.CreateBookRequestDto;
 import com.bookshop.model.Book;
 import com.bookshop.model.Category;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -43,6 +44,8 @@ public interface BookMapper {
 
     @Named("bookFromId")
     default Book bookFromId(Long id) {
-        return new Book(id);
+        return Optional.ofNullable(id)
+                .map(Book::new)
+                .orElse(null);
     }
 }

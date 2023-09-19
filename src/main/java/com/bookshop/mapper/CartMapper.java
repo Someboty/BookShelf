@@ -2,34 +2,17 @@ package com.bookshop.mapper;
 
 import com.bookshop.config.MapperConfig;
 import com.bookshop.dto.cart.CartDto;
-import com.bookshop.dto.cart.CartItemDtoResponse;
-import com.bookshop.model.CartItem;
 import com.bookshop.model.ShoppingCart;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class, uses = CartItemMapper.class)
 public interface CartMapper {
-    default CartDto toCartDto(ShoppingCart cart) {
-        CartDto dto = new CartDto();
-        dto.setId(cart.getId());
-        dto.setUserId(cart.getId());
-        Set<CartItemDtoResponse> items = new HashSet<>();
-        if (!cart.getCartItems().isEmpty()) {
-            items = cart.getCartItems().stream()
-                    .map(i -> {
-                        CartItemDtoResponse response = new CartItemDtoResponse();
-                        response.setId(i.getId());
-                        response.setQuantity(i.getQuantity());
-                        response.setBookId(i.getBook().getId());
-                        response.setBookTitle(i.getBook().getTitle());
-                        return response;
-                    }).collect(Collectors.toSet());
-        }
-        return dto;
-    }
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "cartItems", target = "cartItems")
+    CartDto toCartDto(ShoppingCart cart);
 
-    CartItemDtoResponse toItemResponse(CartItem cartItem);
+    @Mapping(source = "userId", target = "user.id")
+    @Mapping(source = "cartItems", target = "cartItems")
+    ShoppingCart toEntity(CartDto cartDto);
 }

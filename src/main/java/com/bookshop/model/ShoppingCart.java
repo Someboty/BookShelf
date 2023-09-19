@@ -1,7 +1,6 @@
 package com.bookshop.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
@@ -22,11 +21,11 @@ public class ShoppingCart {
     @Id
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @MapsId
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "shoppingCart")
     @EqualsAndHashCode.Exclude
     private Set<CartItem> cartItems = new HashSet<>();
 }

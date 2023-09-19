@@ -10,5 +10,9 @@ public interface CartService {
 
     CartItemDtoResponse createCartItem(Long userId, CreateCartItemDto request);
 
-    CartItemDtoResponse updateCartItem(Long userId, int cartItemId, PutCartItemDto quantity);
+    CartItemDtoResponse updateCartItem(Long userId, Long cartItemId, PutCartItemDto request);
+
+    void removeCartItem(Long userId, Long cartItemId);
+
+    void clearCart(Long userId);
 }

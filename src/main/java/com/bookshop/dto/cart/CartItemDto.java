@@ -1,6 +1,5 @@
 package com.bookshop.dto.cart;
 
-import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class CartDto {
+public class CartItemDto {
     private Long id;
-    private Long userId;
-    private Set<CartItemDto> cartItems;
+    private Long bookId;
+    private String bookTitle;
+    private int quantity;
 }
