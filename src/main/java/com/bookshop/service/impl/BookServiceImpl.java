@@ -57,7 +57,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
-        bookById(id);
+        checkBookById(id);
         bookRepository.deleteById(id);
     }
 
@@ -75,6 +75,13 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAllByCategoryId(id, pageable).stream()
                 .map(bookMapper::toDtoWithoutCategories)
                 .toList();
+    }
+
+    @Override
+    public void checkBookById(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find book by id: " + id);
+        }
     }
 
     private Book bookById(Long id) {

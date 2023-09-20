@@ -1,14 +1,14 @@
 package com.bookshop.dto.cart;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class CartItemDtoResponse {
+    @Schema(example = "1")
     private Long id;
+    @Schema(example = "1")
     private Long bookId;
+    @Schema(example = "2")
     private int quantity;
 }

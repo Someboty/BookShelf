@@ -11,6 +11,7 @@ import com.bookshop.model.User;
 import com.bookshop.repository.role.RoleRepository;
 import com.bookshop.repository.user.UserRepository;
 import com.bookshop.service.UserService;
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +51,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserRegistrationRoleResponseDto registerWithRole(UserRegistrationRoleRequestDto request)
             throws RegistrationException {
-        UserRegistrationRequestDto userDto = userMapper.toStandardModel(request);
-        User user = userMapper.toEntity(userDto);
+        User user = userMapper.toEntity(userMapper.toStandardModel(request));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         setRoles(user, request.getRole());
         return userMapper.toRegistrationResponse(userRepository.save(user));
     }
@@ -60,8 +61,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserRegistrationRoleResponseDto setAsRole(String query) throws RegistrationException {
         User user = findByEmail(query);
-        String roles = prepareRole(query);
-        setRoles(user, roles);
+        setRoles(user, prepareRole(query));
         return userMapper.toRegistrationResponse(userRepository.save(user));
     }
 
@@ -96,15 +96,15 @@ public class UserServiceImpl implements UserService {
 
     private void setRoles(User user, String roles) throws RegistrationException {
         switch (roles) {
-            case ("admin") -> user.setRoles(Set.of(roleRepository
+            case ("admin") -> user.setRoles(new HashSet<>(Set.of(roleRepository
                             .getUserRoleByName(Role.RoleName.ROLE_USER),
                     roleRepository.getUserRoleByName(Role.RoleName.ROLE_MANAGER),
-                    roleRepository.getUserRoleByName(Role.RoleName.ROLE_ADMIN)));
-            case ("manager") -> user.setRoles(Set.of(roleRepository
+                    roleRepository.getUserRoleByName(Role.RoleName.ROLE_ADMIN))));
+            case ("manager") -> user.setRoles(new HashSet<>(Set.of(roleRepository
                             .getUserRoleByName(Role.RoleName.ROLE_USER),
-                    roleRepository.getUserRoleByName(Role.RoleName.ROLE_MANAGER)));
-            case ("user") -> user.setRoles(Set.of(roleRepository
-                    .getUserRoleByName(Role.RoleName.ROLE_USER)));
+                    roleRepository.getUserRoleByName(Role.RoleName.ROLE_MANAGER))));
+            case ("user") -> user.setRoles(new HashSet<>(Set.of(roleRepository
+                    .getUserRoleByName(Role.RoleName.ROLE_USER))));
             default -> throw new RegistrationException("Incorrect role: " + roles);
         }
     }

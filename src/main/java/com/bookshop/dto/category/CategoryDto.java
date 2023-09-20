@@ -1,14 +1,14 @@
 package com.bookshop.dto.category;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class CategoryDto {
+    @Schema(example = "1")
     private Long id;
+    @Schema(example = "Comedy")
     private String name;
+    @Schema(example = "Some funny books")
     private String description;
 }

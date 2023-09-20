@@ -3,14 +3,12 @@ package com.bookshop.dto.user;
 import com.bookshop.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class UserRegistrationRoleResponseDto {
+    @Schema(example = "1")
     private Long id;
 
     @Schema(example = "bob@mail.com")
