@@ -14,6 +14,7 @@ public class CategoryDtoRequest {
     @Length(min = 1, max = 255, message = "name's length should be between 1 and 255 characters")
     private String name;
     @NotNull(message = "description can't be null")
-    @Length(min = 1, max = 255, message = "description's length should be between 1 and 255 characters")
+    @Length(min = 1, max = 255,
+            message = "description's length should be between 1 and 255 characters")
     private String description;
 }
