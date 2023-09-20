@@ -1,6 +1,7 @@
 package com.bookshop.service.impl;
 
-import com.bookshop.dto.category.CategoryDto;
+import com.bookshop.dto.category.request.CategoryDtoRequest;
+import com.bookshop.dto.category.response.CategoryDto;
 import com.bookshop.exception.EntityNotFoundException;
 import com.bookshop.mapper.CategoryMapper;
 import com.bookshop.model.Category;
@@ -30,17 +31,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto save(CategoryDto categoryDto) {
+    public CategoryDto save(CategoryDtoRequest request) {
         return categoryMapper.toDto(
-                categoryRepository.save(categoryMapper.toCategory(categoryDto)));
+                categoryRepository.save(categoryMapper.toCategory(request)));
     }
 
     @Override
     @Transactional
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
+    public CategoryDto update(Long id, CategoryDtoRequest request) {
         Category category = categoryById(id);
-        category.setName(categoryDto.getName());
-        category.setDescription(categoryDto.getDescription());
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 

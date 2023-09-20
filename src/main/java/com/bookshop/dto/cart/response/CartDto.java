@@ -1,4 +1,4 @@
-package com.bookshop.dto.cart;
+package com.bookshop.dto.cart.response;
 
 import java.util.Set;
 import lombok.EqualsAndHashCode;

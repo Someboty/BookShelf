@@ -1,4 +1,4 @@
-package com.bookshop.dto.cart;
+package com.bookshop.dto.category.response;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class CartItemDtoResponse {
+public class CategoryDto {
     private Long id;
-    private Long bookId;
-    private int quantity;
+    private String name;
+    private String description;
 }

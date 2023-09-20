@@ -1,7 +1,7 @@
 package com.bookshop.controller;
 
-import com.bookshop.dto.user.UserRegistrationRoleRequestDto;
-import com.bookshop.dto.user.UserRegistrationRoleResponseDto;
+import com.bookshop.dto.user.request.UserRegistrationRoleRequestDto;
+import com.bookshop.dto.user.response.UserRegistrationRoleResponseDto;
 import com.bookshop.exception.RegistrationException;
 import com.bookshop.res.Openapi;
 import com.bookshop.service.UserService;

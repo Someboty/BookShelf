@@ -1,6 +1,6 @@
 package com.bookshop.repository.book;
 
-import com.bookshop.dto.book.BookSearchParameters;
+import com.bookshop.dto.book.request.BookSearchParameters;
 import com.bookshop.model.Book;
 import com.bookshop.repository.SpecificationBuilder;
 import com.bookshop.repository.SpecificationProviderManager;

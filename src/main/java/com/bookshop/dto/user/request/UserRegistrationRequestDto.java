@@ -1,4 +1,4 @@
-package com.bookshop.dto.user;
+package com.bookshop.dto.user.request;
 
 import com.bookshop.validation.PasswordsMatch;
 import io.swagger.v3.oas.annotations.media.Schema;

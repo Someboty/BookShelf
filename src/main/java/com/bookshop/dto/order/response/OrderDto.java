@@ -1,4 +1,4 @@
-package com.bookshop.dto.order;
+package com.bookshop.dto.order.response;
 
 import com.bookshop.model.Order;
 import java.math.BigDecimal;

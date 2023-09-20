@@ -1,10 +1,10 @@
 package com.bookshop.mapper;
 
 import com.bookshop.config.MapperConfig;
-import com.bookshop.dto.cart.CartItemDto;
-import com.bookshop.dto.cart.CartItemDtoResponse;
-import com.bookshop.dto.cart.CreateCartItemDto;
-import com.bookshop.dto.cart.PutCartItemDto;
+import com.bookshop.dto.cart.response.CartItemDto;
+import com.bookshop.dto.cart.response.CartItemDtoResponse;
+import com.bookshop.dto.cart.request.CreateCartItemDto;
+import com.bookshop.dto.cart.request.PutCartItemDto;
 import com.bookshop.model.CartItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

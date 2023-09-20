@@ -1,6 +1,6 @@
 package com.bookshop.repository;
 
-import com.bookshop.dto.book.BookSearchParameters;
+import com.bookshop.dto.book.request.BookSearchParameters;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface SpecificationBuilder<T> {

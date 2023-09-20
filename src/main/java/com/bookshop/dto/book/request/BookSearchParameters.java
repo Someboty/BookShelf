@@ -1,4 +1,4 @@
-package com.bookshop.dto.book;
+package com.bookshop.dto.book.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

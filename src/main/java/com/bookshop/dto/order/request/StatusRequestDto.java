@@ -1,4 +1,4 @@
-package com.bookshop.dto.order;
+package com.bookshop.dto.order.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;

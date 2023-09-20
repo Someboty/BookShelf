@@ -1,7 +1,8 @@
 package com.bookshop.controller;
 
-import com.bookshop.dto.book.BookDtoWithoutCategoryIds;
-import com.bookshop.dto.category.CategoryDto;
+import com.bookshop.dto.book.response.BookDtoWithoutCategoryIds;
+import com.bookshop.dto.category.request.CategoryDtoRequest;
+import com.bookshop.dto.category.response.CategoryDto;
 import com.bookshop.res.Openapi;
 import com.bookshop.service.BookService;
 import com.bookshop.service.CategoryService;
@@ -63,8 +64,8 @@ public class CategoryController {
     @PreAuthorize("hasRole('MANAGER')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto createCategory(@RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.save(categoryDto);
+    public CategoryDto createCategory(@RequestBody @Valid CategoryDtoRequest request) {
+        return categoryService.save(request);
     }
 
     @ApiResponses(value = {
@@ -136,8 +137,8 @@ public class CategoryController {
             description = "Updates a category with certain id, based on data, provided in the body")
     public CategoryDto updateCategory(
             @PathVariable Long id,
-            @RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.update(id, categoryDto);
+            @RequestBody @Valid CategoryDtoRequest request) {
+        return categoryService.update(id, request);
     }
 
     @ApiResponses(value = {

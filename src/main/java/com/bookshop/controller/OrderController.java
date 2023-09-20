@@ -1,9 +1,9 @@
 package com.bookshop.controller;
 
-import com.bookshop.dto.order.OrderDto;
-import com.bookshop.dto.order.OrderItemDto;
-import com.bookshop.dto.order.ShippingAddressRequestDto;
-import com.bookshop.dto.order.StatusRequestDto;
+import com.bookshop.dto.order.response.OrderDto;
+import com.bookshop.dto.order.response.OrderItemDto;
+import com.bookshop.dto.order.request.ShippingAddressRequestDto;
+import com.bookshop.dto.order.request.StatusRequestDto;
 import com.bookshop.model.User;
 import com.bookshop.res.Openapi;
 import com.bookshop.service.OrderService;

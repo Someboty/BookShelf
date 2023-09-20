@@ -1,4 +1,4 @@
-package com.bookshop.dto.book;
+package com.bookshop.dto.book.request;
 
 import com.bookshop.validation.Isbn;
 import io.swagger.v3.oas.annotations.media.Schema;

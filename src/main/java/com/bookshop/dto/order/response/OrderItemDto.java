@@ -1,4 +1,4 @@
-package com.bookshop.dto.cart;
+package com.bookshop.dto.order.response;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -7,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class CartItemDto {
+public class OrderItemDto {
     private Long id;
     private Long bookId;
-    private String bookTitle;
     private int quantity;
 }
