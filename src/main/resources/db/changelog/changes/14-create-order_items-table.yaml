@@ -17,13 +17,17 @@ databaseChangeLog:
                   name: order_id
                   type: bigint
                   constraints:
-                    foreignKeyName: orders.id
+                    foreignKeyName: orders_id
+                    referencedTableName: orders
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: book_id
                   type: bigint
                   constraints:
                     foreignKeyName: books.id
+                    referencedTableName: books
+                    referencedColumnNames: id
                     nullable: false
               - column:
                   name: quantity

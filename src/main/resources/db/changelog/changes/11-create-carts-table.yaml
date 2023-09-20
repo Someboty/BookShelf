@@ -18,4 +18,6 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     foreignKeyName: users.id
+                    referencedTableName: users
+                    referencedColumnNames: id
                     nullable: false

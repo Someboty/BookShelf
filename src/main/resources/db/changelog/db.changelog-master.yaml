@@ -20,9 +20,9 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/10-insert-admin-user.yaml
   - include:
-      file: db/changelog/changes/11-create-items-table.yaml
+      file: db/changelog/changes/11-create-carts-table.yaml
   - include:
-      file: db/changelog/changes/12-create-carts-table.yaml
+      file: db/changelog/changes/12-create-items-table.yaml
   - include:
       file: db/changelog/changes/13-create-orders-table.yaml
   - include:
