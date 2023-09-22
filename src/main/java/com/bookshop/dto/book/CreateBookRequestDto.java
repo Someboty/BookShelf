@@ -7,13 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Set;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class CreateBookRequestDto {
     @NotNull(message = "title can't be null, should be set")
     @Size(min = 1, max = 255, message = "title should be between 1 and 255 characters")

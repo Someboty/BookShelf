@@ -1,13 +1,9 @@
 package com.bookshop.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class UserLoginResponseDto {
     @Schema(example = "eyJhbGciOiJIUzUxMiJ9."
             + "eyJzdWIiOiJ2bGFkaWduYXRpdWtAZ21haWwuY29tIiwiaWF0"

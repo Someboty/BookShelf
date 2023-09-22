@@ -2,6 +2,8 @@ package com.bookshop.exception;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
+import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -20,9 +22,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
         ExceptionBody body = new ExceptionBody(LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST,
                 ex.getBindingResult().getAllErrors().stream()
@@ -34,6 +36,15 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFound(
             EntityNotFoundException ex) {
+        ExceptionBody body = new ExceptionBody(LocalDateTime.now(),
+                HttpStatus.NOT_FOUND,
+                List.of(ex.getMessage()));
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Object> handleNoSuchElement(
+            NoSuchElementException ex) {
         ExceptionBody body = new ExceptionBody(LocalDateTime.now(),
                 HttpStatus.NOT_FOUND,
                 List.of(ex.getMessage()));

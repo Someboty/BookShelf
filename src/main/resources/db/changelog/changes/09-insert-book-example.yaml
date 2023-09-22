@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-book-example
+      author: Vladyslav Ihnatiuk
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column: {name: title, value: "The Book"}
+              - column: {name: author, value: "Some bizarre being"}
+              - column: {name: isbn, value: "978-1569319024"}
+              - column: {name: price, valueNumeric: "15.99"}
+              - column: {name: description, value: "The very first one"}
+              - column: {name: cover_image, value: "some url here"}
+              - column: {name: is_deleted, valueBoolean: "false"}
