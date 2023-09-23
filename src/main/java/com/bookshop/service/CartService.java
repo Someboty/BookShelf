@@ -1,9 +1,9 @@
 package com.bookshop.service;
 
-import com.bookshop.dto.cart.CartDto;
-import com.bookshop.dto.cart.CartItemDtoResponse;
-import com.bookshop.dto.cart.CreateCartItemDto;
-import com.bookshop.dto.cart.PutCartItemDto;
+import com.bookshop.dto.cart.request.CreateCartItemDto;
+import com.bookshop.dto.cart.request.PutCartItemDto;
+import com.bookshop.dto.cart.response.CartDto;
+import com.bookshop.dto.cart.response.CartItemDtoResponse;
 
 public interface CartService {
     CartDto getCartInfo(Long userId);

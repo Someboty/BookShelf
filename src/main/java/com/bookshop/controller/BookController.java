@@ -1,8 +1,8 @@
 package com.bookshop.controller;
 
-import com.bookshop.dto.book.BookDto;
-import com.bookshop.dto.book.BookSearchParameters;
-import com.bookshop.dto.book.CreateBookRequestDto;
+import com.bookshop.dto.book.request.BookSearchParameters;
+import com.bookshop.dto.book.request.CreateBookRequestDto;
+import com.bookshop.dto.book.response.BookDto;
 import com.bookshop.res.Openapi;
 import com.bookshop.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;

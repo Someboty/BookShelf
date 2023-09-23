@@ -1,9 +1,9 @@
 package com.bookshop.service.impl;
 
-import com.bookshop.dto.book.BookDto;
-import com.bookshop.dto.book.BookDtoWithoutCategoryIds;
-import com.bookshop.dto.book.BookSearchParameters;
-import com.bookshop.dto.book.CreateBookRequestDto;
+import com.bookshop.dto.book.request.BookSearchParameters;
+import com.bookshop.dto.book.request.CreateBookRequestDto;
+import com.bookshop.dto.book.response.BookDto;
+import com.bookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import com.bookshop.exception.EntityNotFoundException;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.model.Book;

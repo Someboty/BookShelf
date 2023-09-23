@@ -1,9 +1,9 @@
 package com.bookshop.mapper;
 
 import com.bookshop.config.MapperConfig;
-import com.bookshop.dto.book.BookDto;
-import com.bookshop.dto.book.BookDtoWithoutCategoryIds;
-import com.bookshop.dto.book.CreateBookRequestDto;
+import com.bookshop.dto.book.request.CreateBookRequestDto;
+import com.bookshop.dto.book.response.BookDto;
+import com.bookshop.dto.book.response.BookDtoWithoutCategoryIds;
 import com.bookshop.model.Book;
 import com.bookshop.model.Category;
 import java.util.Optional;

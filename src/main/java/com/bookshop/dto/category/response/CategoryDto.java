@@ -1,4 +1,4 @@
-package com.bookshop.dto.category;
+package com.bookshop.dto.category.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

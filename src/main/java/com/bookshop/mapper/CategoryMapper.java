@@ -1,7 +1,8 @@
 package com.bookshop.mapper;
 
 import com.bookshop.config.MapperConfig;
-import com.bookshop.dto.category.CategoryDto;
+import com.bookshop.dto.category.request.CategoryDtoRequest;
+import com.bookshop.dto.category.response.CategoryDto;
 import com.bookshop.model.Category;
 import org.mapstruct.Mapper;
 
@@ -9,5 +10,5 @@ import org.mapstruct.Mapper;
 public interface CategoryMapper {
     CategoryDto toDto(Category category);
 
-    Category toCategory(CategoryDto categoryDto);
+    Category toCategory(CategoryDtoRequest request);
 }

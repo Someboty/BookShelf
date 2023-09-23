@@ -1,4 +1,4 @@
-package com.bookshop.dto.book;
+package com.bookshop.dto.book.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;

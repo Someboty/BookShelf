@@ -1,12 +1,12 @@
 package com.bookshop.controller;
 
-import com.bookshop.dto.cart.request.CreateCartItemDto;
-import com.bookshop.dto.cart.request.PutCartItemDto;
-import com.bookshop.dto.cart.response.CartDto;
-import com.bookshop.dto.cart.response.CartItemDtoResponse;
+import com.bookshop.dto.order.request.ShippingAddressRequestDto;
+import com.bookshop.dto.order.request.StatusRequestDto;
+import com.bookshop.dto.order.response.OrderDto;
+import com.bookshop.dto.order.response.OrderItemDto;
 import com.bookshop.model.User;
 import com.bookshop.res.Openapi;
-import com.bookshop.service.CartService;
+import com.bookshop.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -14,35 +14,41 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Carts", description = "Operations related to carts")
+@Tag(name = "Orders", description = "Operations related to orders")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/cart")
-public class CartController {
+@RequestMapping("/orders")
+public class OrderController {
     private static final String BAD_REQUEST_EXAMPLE = Openapi.BAD_REQUEST_EXAMPLE;
-    private static final String CART_ITEM_NOT_FOUND_EXAMPLE = Openapi.OBJECT_NOT_FOUND_EXAMPLE;
+    private static final String CART_NOT_FOUND_EXAMPLE = Openapi.OBJECT_NOT_FOUND_EXAMPLE;
 
-    private final CartService cartService;
+    private final OrderService orderService;
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "List of cart items retrieved successfully"),
+                    description = "List of orders retrieved successfully"),
             @ApiResponse(responseCode = "401",
                     description = "User should be authenticated to do this operation",
                     content = {@Content()}),
+            @ApiResponse(responseCode = "404",
+                    description = "Can't find order by id",
+                    content = {@Content(mediaType = "application/json",
+                            examples = {@ExampleObject(value = CART_NOT_FOUND_EXAMPLE)}
+                            )}),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json",
                             examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
@@ -50,16 +56,16 @@ public class CartController {
             )
     })
     @GetMapping
-    @Operation(summary = "Get list of all cart items in the user cart",
-            description = "Returns a list of cart items")
-    public CartDto getCartInfo(Authentication authentication) {
+    @Operation(summary = "Get user's orders history",
+            description = "Get set of user's orders with items")
+    public Set<OrderDto> getHistory(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return cartService.getCartInfo(user.getId());
+        return orderService.getHistory(user.getId());
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
-                    description = "Cart item created successfully"),
+                    description = "Order created successfully"),
             @ApiResponse(responseCode = "400",
                     description = "Incorrect data was provided to the body",
                     content = {@Content(mediaType = "application/json",
@@ -69,6 +75,11 @@ public class CartController {
             @ApiResponse(responseCode = "401",
                     description = "User should be authenticated to do this operation",
                     content = {@Content()}),
+            @ApiResponse(responseCode = "404",
+                    description = "Can't find order by id",
+                    content = {@Content(mediaType = "application/json",
+                            examples = {@ExampleObject(value = CART_NOT_FOUND_EXAMPLE)}
+                            )}),
             @ApiResponse(responseCode = "500",
                     description = "Internal server error",
                     content = {@Content(mediaType = "application/json",
@@ -76,22 +87,22 @@ public class CartController {
                             )}
             ),
     })
-    @Operation(summary = "Create a new cart item",
-            description = "Creates a new cart item based on data, provided in the body")
+    @Operation(summary = "Create a new order",
+            description = "Creates a new order based on cart and shipping address")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CartItemDtoResponse createCartItem(
+    public OrderDto createOrder(
             Authentication authentication,
-            @RequestBody @Valid CreateCartItemDto request) {
+            @RequestBody @Valid ShippingAddressRequestDto request) {
         User user = (User) authentication.getPrincipal();
-        return cartService.createCartItem(user.getId(), request);
+        return orderService.createOrder(user.getId(), request);
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Cart item updated successfully"),
+                    description = "Order status updated successfully"),
             @ApiResponse(responseCode = "400",
-                    description = "Incorrect data was provided to the body",
+                    description = "Incorrect status was provided to the body",
                     content = {@Content(mediaType = "application/json",
                             examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                             )}
@@ -99,76 +110,75 @@ public class CartController {
             @ApiResponse(responseCode = "401",
                     description = "User should be authenticated to do this operation",
                     content = {@Content()}),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal server error",
+            @ApiResponse(responseCode = "403",
+                    description = "Only users with role \"MANAGER\" can do such operation",
+                    content = {@Content()}),
+            @ApiResponse(responseCode = "404",
+                    description = "Can't find order by id",
+                    content = {@Content(mediaType = "application/json",
+                            examples = {@ExampleObject(value = CART_NOT_FOUND_EXAMPLE)}
+                            )}),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json",
                             examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                             )}
             ),
     })
-    @Operation(summary = "Update a cart item by id",
-            description = "Updates a cart item, based on data, provided in the body")
-    @PutMapping("/cart-items/{cartItemId}")
-    public CartItemDtoResponse updateCartItem(
-            Authentication authentication,
-            @PathVariable Long cartItemId,
-            @RequestBody @Valid PutCartItemDto request) {
-        User user = (User) authentication.getPrincipal();
-        return cartService.updateCartItem(user.getId(), cartItemId, request);
+    @Operation(summary = "Update order status by id",
+            description = "Allows manager to change order's status by id")
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public OrderDto updateStatus(
+            @PathVariable Long id,
+            @RequestBody @Valid StatusRequestDto request) {
+        return orderService.updateStatus(id, request);
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204",
-                    description = "Cart item deleted successfully"),
+            @ApiResponse(responseCode = "200",
+                    description = "Order items retrieved successfully"),
             @ApiResponse(responseCode = "401",
                     description = "User should be authenticated to do this operation",
                     content = {@Content()}),
             @ApiResponse(responseCode = "404",
-                    description = "Cart item with such id doesn't exists or was previously deleted",
+                    description = "Can't find order by id",
                     content = {@Content(mediaType = "application/json",
-                            examples = {@ExampleObject(value = CART_ITEM_NOT_FOUND_EXAMPLE)}
-                            )}
-            ),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal server error",
+                            examples = {@ExampleObject(value = CART_NOT_FOUND_EXAMPLE)}
+                            )}),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json",
                             examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                             )}
             ),
     })
-    @DeleteMapping("/cart-items/{cartItemId}")
-    @Operation(summary = "Delete cart item by id",
-            description = "Deletes cart item with certain id")
-    public void deleteCartItem(
-            Authentication authentication,
-            @PathVariable Long cartItemId) {
-        User user = (User) authentication.getPrincipal();
-        cartService.removeCartItem(user.getId(), cartItemId);
+    @Operation(summary = "Get order items by order id",
+            description = "Get set of all order items by provided order id")
+    @GetMapping("/{orderId}/items")
+    public Set<OrderItemDto> getAllItems(@PathVariable Long orderId) {
+        return orderService.getAllItems(orderId);
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204",
-                    description = "Cart item deleted successfully"),
+            @ApiResponse(responseCode = "200",
+                    description = "Order item retrieved successfully"),
             @ApiResponse(responseCode = "401",
                     description = "User should be authenticated to do this operation",
                     content = {@Content()}),
             @ApiResponse(responseCode = "404",
-                    description = "Cart item with such id doesn't exists or was previously deleted",
+                    description = "Can't find order or order item by id",
                     content = {@Content(mediaType = "application/json",
-                            examples = {@ExampleObject(value = CART_ITEM_NOT_FOUND_EXAMPLE)}
-                            )}
-            ),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal server error",
+                            examples = {@ExampleObject(value = CART_NOT_FOUND_EXAMPLE)}
+                            )}),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = {@Content(mediaType = "application/json",
                             examples = {@ExampleObject(value = BAD_REQUEST_EXAMPLE)}
                             )}
             ),
     })
-    @DeleteMapping
-    @Operation(summary = "Clear cart", description = "Deletes all cart items in user cart")
-    public void clearCart(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        cartService.clearCart(user.getId());
+    @Operation(summary = "Get order item by order id and item id",
+            description = "Get set of all order items by provided order id and item id")
+    @GetMapping("/{orderId}/items/{itemId}")
+    public OrderItemDto getItemById(@PathVariable Long orderId, @PathVariable Long itemId) {
+        return orderService.getItemById(orderId, itemId);
     }
 }

@@ -1,4 +1,4 @@
-package com.bookshop.dto.cart;
+package com.bookshop.dto.cart.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Set;
