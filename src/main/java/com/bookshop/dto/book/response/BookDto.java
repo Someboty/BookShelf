@@ -3,13 +3,10 @@ package com.bookshop.dto.book.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.Set;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class BookDto {
     private Long id;
     @Schema(example = "title")

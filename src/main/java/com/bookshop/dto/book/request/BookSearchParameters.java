@@ -1,12 +1,8 @@
 package com.bookshop.dto.book.request;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class BookSearchParameters {
     private String[] titles;
     private String[] authors;
