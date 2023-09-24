@@ -45,7 +45,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDto createOrder(Long userId, ShippingAddressRequestDto request) {
-        ShoppingCart cart = cartRepository.getShoppingCartByUser_Id(userId);
+        ShoppingCart cart = cartRepository.getShoppingCartByUser_Id(userId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user with id" + userId)
+        );
         Order order = formOrder(cart, request.getShippingAddress());
         orderRepository.save(order);
         orderItemRepository.saveAll(order.getOrderItems());

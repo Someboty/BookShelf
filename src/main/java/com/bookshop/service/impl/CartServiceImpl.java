@@ -13,8 +13,10 @@ import com.bookshop.model.User;
 import com.bookshop.repository.cart.CartRepository;
 import com.bookshop.repository.cart.item.CartItemRepository;
 import com.bookshop.repository.user.UserRepository;
+import com.bookshop.service.BookService;
 import com.bookshop.service.CartService;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class CartServiceImpl implements CartService {
     private final CartMapper cartMapper;
     private final UserRepository userRepository;
     private final BookMapper bookMapper;
+    private final BookService bookService;
     private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
 
@@ -33,13 +36,6 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartDto getCartInfo(Long userId) {
         ShoppingCart cart = findCart(userId);
-        if (cart == null) {
-            User user = findUserById(userId);
-            cart = new ShoppingCart();
-            cart.setId(userId);
-            cart.setUser(user);
-            cartRepository.save(cart);
-        }
         return cartMapper.toCartDto(cart);
     }
 
@@ -47,11 +43,14 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartItemDtoResponse createCartItem(Long userId, CreateCartItemDto request) {
         ShoppingCart cart = findCart(userId);
-        CartItem item = findCartItemByBookId(cart, request.getBookId());
-        if (item != null) {
-            return updateCartItem(userId, item.getId(), cartItemMapper.toPutDto(request));
+        Optional<CartItem> optionalCartItem = findCartItemByBookId(cart, request.getBookId());
+        if (optionalCartItem.isPresent()) {
+            return updateCartItem(userId,
+                    optionalCartItem.get().getId(),
+                    cartItemMapper.toPutDto(request));
         }
-        item = new CartItem();
+        checkIsBookValid(request.getBookId());
+        CartItem item = new CartItem();
         item.setShoppingCart(cart);
         item.setBook(bookMapper.bookFromId(request.getBookId()));
         item.setQuantity(request.getQuantity());
@@ -65,8 +64,7 @@ public class CartServiceImpl implements CartService {
             Long userId,
             Long cartItemId,
             PutCartItemDto request) {
-        ShoppingCart cart = findCart(userId);
-        CartItem item = findCartItemById(cart, cartItemId);
+        CartItem item = findCartItemById(findCart(userId), cartItemId);
         item.setQuantity(request.getQuantity());
         cartItemRepository.save(item);
         return cartItemMapper.toCreateDtoResponse(item);
@@ -75,20 +73,18 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public void removeCartItem(Long userId, Long cartItemId) {
-        ShoppingCart cart = findCart(userId);
-        findCartItemById(cart, cartItemId);
-        cartItemRepository.deleteById(cartItemId);
+        cartItemRepository.delete(findCartItemById(findCart(userId), cartItemId));
     }
 
     @Override
     @Transactional
     public void clearCart(Long userId) {
-        findCart(userId);
-        cartItemRepository.deleteAllByShoppingCartId(findCart(userId).getId());
+        cartItemRepository.deleteAllByShoppingCart(findCart(userId));
     }
 
     private ShoppingCart findCart(Long userId) {
-        return cartRepository.getShoppingCartByUser_Id(userId);
+        Optional<ShoppingCart> cart = cartRepository.getShoppingCartByUser_Id(userId);
+        return cart.orElseGet(() -> cart.orElse(createCart(userId)));
     }
 
     private CartItem findCartItemById(ShoppingCart cart, Long cartItemId) {
@@ -100,18 +96,29 @@ public class CartServiceImpl implements CartService {
         );
     }
 
-    private CartItem findCartItemByBookId(ShoppingCart cart, Long bookId) {
+    private Optional<CartItem> findCartItemByBookId(ShoppingCart cart, Long bookId) {
         return cart.getCartItems().stream()
                 .filter(c -> c.getBook()
                         .getId()
                         .equals(bookId))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new NoSuchElementException("Can't find a user with id "
                         + userId));
+    }
+
+    private ShoppingCart createCart(Long userId) {
+        User user = findUserById(userId);
+        ShoppingCart cart = new ShoppingCart();
+        cart.setId(userId);
+        cart.setUser(user);
+        return cartRepository.save(cart);
+    }
+
+    private void checkIsBookValid(Long bookId) {
+        bookService.checkBookById(bookId);
     }
 }

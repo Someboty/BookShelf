@@ -8,24 +8,25 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "carts")
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class ShoppingCart {
     @Id
     private Long id;
 
     @OneToOne
     @MapsId
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private User user;
 
     @OneToMany(mappedBy = "shoppingCart")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<CartItem> cartItems = new HashSet<>();
 }

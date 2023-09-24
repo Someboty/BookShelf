@@ -13,9 +13,9 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -24,9 +24,8 @@ import org.hibernate.annotations.Where;
 @Table(name = "books")
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
 @Where(clause = "is_deleted = false")
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
+@NoArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,10 +52,6 @@ public class Book {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Category> categories = new HashSet<>();
-
-    public Book() {
-
-    }
 
     public Book(Long id) {
         this.id = id;
