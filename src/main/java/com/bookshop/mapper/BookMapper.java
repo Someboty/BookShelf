@@ -26,20 +26,16 @@ public interface BookMapper {
 
     @AfterMapping
     default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
-        if (book.getCategories() != null) {
-            bookDto.setCategoryIds(book.getCategories().stream()
-                    .map(Category::getId)
-                    .collect(Collectors.toSet()));
-        }
+        bookDto.setCategoryIds(book.getCategories().stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet()));
     }
 
     @AfterMapping
     default void setCategories(@MappingTarget Book book, CreateBookRequestDto bookDto) {
-        if (!bookDto.getCategoryIds().isEmpty()) {
-            book.setCategories(bookDto.getCategoryIds().stream()
-                    .map(Category::new)
-                    .collect(Collectors.toSet()));
-        }
+        book.setCategories(bookDto.getCategoryIds().stream()
+                .map(Category::new)
+                .collect(Collectors.toSet()));
     }
 
     @Named("bookFromId")
