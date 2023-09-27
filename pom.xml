@@ -10,7 +10,7 @@
     </parent>
     <groupId>com</groupId>
     <artifactId>bookShop</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0</version>
     <name>bookShop</name>
     <description>bookShop</description>
     <properties>
@@ -105,6 +105,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
