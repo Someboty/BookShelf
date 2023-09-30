@@ -4,19 +4,28 @@ services:
   mysqldb:
     platform: linux/x86_64
     image: mysql:8
+    env_file: ./.env
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+      MYSQL_ROOT_PASSWORD: $MYSQLDB_ROOT_PASSWORD
+      MYSQL_USER: $MYSQLDB_USER1
+      MYSQL_PASSWORD: $MYSQLDB_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQLDB_DATABASE
     ports:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    healthcheck:
+      test: [$CONSOLE_TYPE, $CONNECTION_COMMAND]
+      timeout: 30s
+      start_period: 5s
+      interval: 5s
+      retries: 5
   app:
-    depends_on:
-      - mysqldb
-    restart: on-failure
     image: book_app
+    restart: on-failure
+    depends_on:
+      mysqldb:
+        condition: service_healthy
     build: .
-    env_file: ./.env
     ports:
       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
       - $DEBUG_PORT:$DEBUG_PORT
