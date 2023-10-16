@@ -59,19 +59,16 @@ public class CategoryControllerTests {
     @DisplayName("Create a new category with all valid fields by manager")
     public void create_ValidCategoryDtoRequestWithAllFieldsByManager_ReturnsCorrectDto()
             throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         CategoryDto expected = mapCreateDtoToDto(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/categories")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn();
-
-        //then
+        
         CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 CategoryDto.class);
         Assertions.assertNotNull(actual);
@@ -86,18 +83,15 @@ public class CategoryControllerTests {
     @DisplayName("Create a new category with all valid fields by user")
     public void create_ValidCategoryDtoRequestWithAllFieldsByUser_ExceptionThrown()
             throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/categories")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();
-
-        //then
+        
         String expected = "Access Denied";
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
@@ -109,11 +103,9 @@ public class CategoryControllerTests {
     @DisplayName("Try to create a new category with all valid fields by unauthenticated user")
     public void create_ValidCategoryDtoRequestWithAllFieldsByUnauthenticatedUser_ExceptionThrown()
             throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         mockMvc.perform(post("/categories")
                     .content(jsonRequest)
                     .contentType(MediaType.APPLICATION_JSON))
@@ -127,19 +119,16 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new category without name by manager")
     public void create_DtoWithoutNameByManager_ExceptionThrown() throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         requestDto.setName(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/categories")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("name can't be null"));
@@ -151,19 +140,16 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new category without description by manager")
     public void create_DtoWithoutDescriptionByManager_ExceptionThrown() throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         requestDto.setDescription(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/categories")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("description can't be null"));
@@ -177,18 +163,15 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getById_GetCategoryByCorrectIdByAuthenticatedUser_ReturnsCategoryDto()
             throws Exception {
-        //given
         CategoryDto expected = new CategoryDto();
         expected.setId(CORRECT_ID_ONE);
         expected.setName("drama");
         expected.setDescription("some sad stuff");
-
-        //when
+        
         MvcResult result = mockMvc.perform(get("/categories/1"))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        //then
+        
         CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 CategoryDto.class);
         Assertions.assertNotNull(actual);
@@ -204,14 +187,12 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getById_GetCategoryByIncorrectIdByAuthenticatedUser_ExceptionThrown()
             throws Exception {
-        //given
         String expected = "Can't find category by id: 42";
-        //when
+        
         MvcResult result = mockMvc.perform(get("/categories/42"))
                 .andExpect(status().isNotFound())
                 .andReturn();
-
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -247,14 +228,12 @@ public class CategoryControllerTests {
             "classpath:database/books/add-one-category.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteById_DeleteCategoryByCorrectIdByUser_ExceptionThrown() throws Exception {
-        //given
         String expected = "Access Denied";
-
-        //when
+        
         MvcResult result = mockMvc.perform(delete("/categories/1"))
                 .andExpect(status().isForbidden())
                 .andReturn();
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -279,13 +258,12 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteById_DeleteCategoryByInCorrectIdByManager_ExceptionThrown()
             throws Exception {
-        //given
         String expected = "Can't find category by id: 42";
-        //when
+        
         MvcResult result = mockMvc.perform(delete("/categories/42"))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -297,7 +275,6 @@ public class CategoryControllerTests {
             "classpath:database/books/add-three-categories.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getAll_GetAllCategoriesByUser_ReturnsListOfCategories() throws Exception {
-        //given
         CategoryDto firstCategory = categoryDtoConstructor(
                 CORRECT_ID_ONE, "science", "some clever stuff");
 
@@ -312,15 +289,13 @@ public class CategoryControllerTests {
         expected.add(secondCategory);
         expected.add(thirdCategory);
         String jsonRequest = objectMapper.writeValueAsString(STANDART_PAGEABLE);
-
-        //when
+        
         MvcResult result = mockMvc.perform(get("/categories")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        //then
+        
         List<CategoryDto> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>(){}
         );
@@ -333,10 +308,8 @@ public class CategoryControllerTests {
             "classpath:database/books/add-three-categories.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getAll_GetAllCategoriesByUnauthenticatedUser_ExceptionThrown() throws Exception {
-        //given
         String jsonRequest = objectMapper.writeValueAsString(STANDART_PAGEABLE);
-
-        //when
+        
         mockMvc.perform(get("/categories")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -351,20 +324,17 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Update a category with all valid fields by manager")
     public void update_UpdateAllFieldsByManager_ReturnsCorrectDto() throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         CategoryDto expected = mapCreateDtoToDto(requestDto);
         expected.setId(CORRECT_ID_ONE);
 
-        //when
         MvcResult result = mockMvc.perform(put("/categories/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        //then
+        
         CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 CategoryDto.class);
         Assertions.assertNotNull(actual);
@@ -379,19 +349,16 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Update a category with all valid fields by user")
     public void update_UpdateAllFieldsByUser_ExceptionThrown() throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         String expected = "Access Denied";
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/categories/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();
-
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -402,11 +369,9 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a category with all valid fields by unauthenticated user")
     public void update_UpdateAllFieldsByUnAuthenticatedUser_ExceptionThrown() throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         mockMvc.perform(put("/categories/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -421,19 +386,16 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a category without name by manager")
     public void update_UpdateWithoutNameByManager_ExceptionThrown() throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         requestDto.setName(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/categories/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        //then
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("name can't be null"));
@@ -446,19 +408,16 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a category without description by manager")
     public void update_UpdateWithoutDescriptionByManager_ExceptionThrown() throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         requestDto.setDescription(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/categories/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        //then
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("description can't be null"));
@@ -471,19 +430,16 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a category with incorrect id by manager")
     public void update_UpdateWithIncorrectIdByManager_ExceptionThrown() throws Exception {
-        //given
         CategoryDtoRequest requestDto = createCategoryDtoRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         String expected = "Can't find category by id: 42";
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/categories/42")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
 
-        //then
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -496,7 +452,6 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getBooksByCategoryId_GetBooksByCorrectIdByUser_ReturnsListOfCategories()
             throws Exception {
-        //given
         BookDtoWithoutCategoryIds firstBook = new BookDtoWithoutCategoryIds();
         firstBook.setId(CORRECT_ID_ONE);
         firstBook.setTitle("The First Book");
@@ -529,14 +484,12 @@ public class CategoryControllerTests {
         expected.add(thirdBook);
         String jsonRequest = objectMapper.writeValueAsString(STANDART_PAGEABLE);
 
-        //when
         MvcResult result = mockMvc.perform(get("/categories/1/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        //then
         List<BookDtoWithoutCategoryIds> actual =
                 objectMapper.readValue(result.getResponse().getContentAsString(),
                         new TypeReference<>(){});
@@ -554,18 +507,15 @@ public class CategoryControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getBooksByCategoryId_GetBooksByIncorrectCorrectIdByUser_ReturnsListOfCategories()
             throws Exception {
-        //given
         String jsonRequest = objectMapper.writeValueAsString(STANDART_PAGEABLE);
         String expected = "Can't find category by id: 42";
-
-        //when
+        
         MvcResult result = mockMvc.perform(get("/categories/42")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
 
-        //then
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }

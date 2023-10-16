@@ -29,12 +29,10 @@ public class BookRepositoryTests {
     @Sql(scripts = "classpath:database/books/remove-all-books-and-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findAllByCategoryId_OneBookWithCorrectCategory_ReturnsOneBook() {
-        //given
         int expected = 1;
-        //when
+        
         List<Book> actual = bookRepository.findAllByCategoryId(1L, STANDART_PAGEABLE);
-
-        //then
+        
         Assertions.assertEquals(expected, actual.size());
         Assertions.assertEquals("The Book", actual.get(0).getTitle());
     }
@@ -46,12 +44,10 @@ public class BookRepositoryTests {
     @Sql(scripts = "classpath:database/books/remove-all-books-and-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findAllByCategoryId_OneBookWithIncorrectCategory_ReturnsEmptyList() {
-        //given
         int expected = 0;
-        //when
+        
         List<Book> actual = bookRepository.findAllByCategoryId(2L, STANDART_PAGEABLE);
-
-        //then
+        
         Assertions.assertEquals(expected, actual.size());
     }
 
@@ -63,12 +59,10 @@ public class BookRepositoryTests {
     @Sql(scripts = "classpath:database/books/remove-all-books-and-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findAllByCategoryId_ManyBooksWithCorrectCategory_ReturnsListOfBooks() {
-        //given
         int expected = 3;
-        //when
+        
         List<Book> actual = bookRepository.findAllByCategoryId(1L, STANDART_PAGEABLE);
 
-        //then
         Assertions.assertEquals(expected, actual.size());
         Assertions.assertEquals("The First Book", actual.get(0).getTitle());
         Assertions.assertEquals("The Second Book", actual.get(1).getTitle());
@@ -83,12 +77,10 @@ public class BookRepositoryTests {
     @Sql(scripts = "classpath:database/books/remove-all-books-and-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findAllByCategoryId_ManyBooksWithInCorrectCategory_ReturnsEmptyList() {
-        //given
         int expected = 0;
-        //when
+        
         List<Book> actual = bookRepository.findAllByCategoryId(2L, STANDART_PAGEABLE);
 
-        //then
         Assertions.assertEquals(expected, actual.size());
     }
 
@@ -100,12 +92,10 @@ public class BookRepositoryTests {
     @Sql(scripts = "classpath:database/books/remove-all-books-and-categories.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findAllByCategoryId_ManyBooksWithDifferentCategories_ReturnsListOfBooks() {
-        //given
         int expected = 4;
-        //when
+        
         List<Book> actual = bookRepository.findAllByCategoryId(2L, STANDART_PAGEABLE);
 
-        //then
         Assertions.assertEquals(expected, actual.size());
         Assertions.assertEquals("The Forth Book", actual.get(0).getTitle());
         Assertions.assertEquals("The Fifth Book", actual.get(1).getTitle());

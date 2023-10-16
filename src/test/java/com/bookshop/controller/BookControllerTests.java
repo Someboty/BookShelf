@@ -60,19 +60,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new book with all valid fields by manager")
     public void create_ValidRequestDtoWithAllFieldsByManager_ReturnsCorrectDto() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         BookDto expected = mapCreateDtoToDto(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        //then
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
         Assertions.assertNotNull(actual);
@@ -87,18 +84,15 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to create a new book with all valid fields by user")
     public void create_ValidRequestDtoWithAllFieldsByUser_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();
-
-        //then
+        
         String expected = "Access Denied";
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
@@ -112,7 +106,6 @@ public class BookControllerTests {
     @DisplayName("Create a new book with only necessary fields by manager")
     public void create_ValidRequestDtoWithOnlyNecessaryFieldsByManager_ReturnsCorrectDto()
             throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setCoverImage(null);
         requestDto.setDescription(null);
@@ -121,15 +114,13 @@ public class BookControllerTests {
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         BookDto expected = mapCreateDtoToDto(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn();
-
-        //then
+        
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
         Assertions.assertNotNull(actual);
@@ -144,19 +135,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new book without title by manager")
     public void create_DtoWithoutTitleByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setTitle(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                 result.getResolvedException()).getMessage()
                 .contains("title can't be null, should be set"));
@@ -169,19 +157,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new book without author by manager")
     public void create_DtoWithoutAuthorByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setAuthor(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("author can't be null, should be set"));
@@ -194,19 +179,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new book without price by manager")
     public void create_DtoWithoutPriceByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setPrice(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("price can't be null, should be set"));
@@ -219,19 +201,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new book with negative price by manager")
     public void create_DtoWithNegativePriceByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setPrice(BigDecimal.valueOf(-2));
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("price can't be less than 0"));
@@ -244,19 +223,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new book without ISBN by manager")
     public void create_DtoWithoutIsbnByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setIsbn(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("ISBN can't be null, should be set"));
@@ -269,19 +245,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new book with short ISBN by manager")
     public void create_DtoWithOneSymbolIsbnByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setIsbn("1");
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("ISBN should be between 10 and 17 characters"));
@@ -294,19 +267,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Create a new book with characters in ISBN by manager")
     public void create_DtoWithIncorrectIsbnByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setIsbn("qwertyuiop");
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("Invalid ISBN format"));
@@ -320,19 +290,16 @@ public class BookControllerTests {
     @DisplayName("Try to create a new book with all valid fields by unauthenticated user")
     public void create_ValidRequestDtoWithAllFieldsByUnauthenticatedUser_ExceptionThrown()
             throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         String expected = "Access Denied";
-
-        //when
+        
         MvcResult result = mockMvc.perform(post("/books")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();
-
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -344,7 +311,6 @@ public class BookControllerTests {
             "classpath:database/books/add-one-book-with-first-category.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getById_GetBookByCorrectIdByAuthenticatedUser_ReturnsBookDto() throws Exception {
-        //given
         BookDto expected = new BookDto();
         expected.setId(CORRECT_ID_ONE);
         expected.setTitle("The Book");
@@ -354,13 +320,11 @@ public class BookControllerTests {
         expected.setDescription("Annotation");
         expected.setCoverImage("scary url");
         expected.setCategoryIds(new HashSet<>(Set.of(CORRECT_ID_ONE)));
-
-        //when
+        
         MvcResult result = mockMvc.perform(get("/books/1"))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        //then
+        
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
         Assertions.assertNotNull(actual);
@@ -376,14 +340,12 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getById_GetBookByIncorrectIdByAuthenticatedUser_ExceptionThrown()
             throws Exception {
-        //given
         String expected = "Can't find book by id: 42";
-        //when
+        
         MvcResult result = mockMvc.perform(get("/books/42"))
                 .andExpect(status().isNotFound())
                 .andReturn();
-
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -407,9 +369,6 @@ public class BookControllerTests {
             "classpath:database/books/add-one-book-with-first-category.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteById_DeleteBookByCorrectIdByManager_Success() throws Exception {
-        //given
-
-        //when
         mockMvc.perform(delete("/books/1"))
                 .andExpect(status().isNoContent())
                 .andReturn();
@@ -422,14 +381,12 @@ public class BookControllerTests {
             "classpath:database/books/add-one-book-with-first-category.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteById_DeleteBookByCorrectIdByUser_ExceptionThrown() throws Exception {
-        //given
         String expected = "Access Denied";
-
-        //when
+        
         MvcResult result = mockMvc.perform(delete("/books/1"))
                 .andExpect(status().isForbidden())
                 .andReturn();
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -453,13 +410,12 @@ public class BookControllerTests {
             "classpath:database/books/add-one-book-with-first-category.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteById_DeleteBookByInCorrectIdByManager_ExceptionThrown() throws Exception {
-        //given
         String expected = "Can't find book by id: 42";
-        //when
+        
         MvcResult result = mockMvc.perform(delete("/books/42"))
                 .andExpect(status().isNotFound())
                 .andReturn();
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -471,7 +427,6 @@ public class BookControllerTests {
             "classpath:database/books/add-three-books-with-first-category.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getAll_GetAllBooksByUser_ReturnsListOfBooks() throws Exception {
-        //given
         BookDto firstBook = bookDtoConstructor(
                 CORRECT_ID_ONE,
                 "The First Book",
@@ -507,15 +462,13 @@ public class BookControllerTests {
         expected.add(secondBook);
         expected.add(thirdBook);
         String jsonRequest = objectMapper.writeValueAsString(STANDART_PAGEABLE);
-
-        //when
+        
         MvcResult result = mockMvc.perform(get("/books")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        //then
+        
         List<BookDto> actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 new TypeReference<>(){});
         Assertions.assertEquals(expected.size(), actual.size());
@@ -530,10 +483,8 @@ public class BookControllerTests {
             "classpath:database/books/add-three-books-with-first-category.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void getAll_GetAllBooksByUnauthenticatedUser_ExceptionThrown() throws Exception {
-        //given
         String jsonRequest = objectMapper.writeValueAsString(STANDART_PAGEABLE);
-
-        //when
+        
         mockMvc.perform(get("/books")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -548,20 +499,17 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Update a book with all valid fields by manager")
     public void update_UpdateAllFieldsByManager_ReturnsCorrectDto() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         BookDto expected = mapCreateDtoToDto(requestDto);
         expected.setId(CORRECT_ID_ONE);
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        //then
+        
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
         Assertions.assertNotNull(actual);
@@ -576,19 +524,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Update a book with all valid fields by user")
     public void update_UpdateAllFieldsByUser_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         String expected = "Access Denied";
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();
-
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
@@ -599,11 +544,9 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Update a book with all valid fields by unauthenticated user")
     public void update_UpdateAllFieldsByUnAuthenticatedUser_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -618,19 +561,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a book without title by manager")
     public void update_UpdateWithoutTitleByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setTitle(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("title can't be null, should be set"));
@@ -643,19 +583,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a book without author by manager")
     public void update_UpdateWithoutAuthorByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setAuthor(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("author can't be null, should be set"));
@@ -668,19 +605,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a book without isbn by manager")
     public void update_UpdateWithoutIsbnByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setIsbn(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        //then
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("ISBN can't be null, should be set"));
@@ -693,19 +627,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a book without price by manager")
     public void update_UpdateWithoutPriceByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setPrice(null);
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("price can't be null, should be set"));
@@ -718,19 +649,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a book with negative price by manager")
     public void update_UpdateWithNegativePriceByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         requestDto.setPrice(BigDecimal.valueOf(-5));
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-
-        //then
+        
         Assertions.assertTrue(Objects.requireNonNull(
                         result.getResolvedException()).getMessage()
                 .contains("price can't be less than 0"));
@@ -743,19 +671,16 @@ public class BookControllerTests {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Try to update a book with incorrect id by manager")
     public void update_UpdateWithIncorrectIdByManager_ExceptionThrown() throws Exception {
-        //given
         CreateBookRequestDto requestDto = createBookRequest();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         String expected = "Can't find book by id: 42";
-
-        //when
+        
         MvcResult result = mockMvc.perform(put("/books/42")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
-
-        //then
+        
         String actual = Objects.requireNonNull(result.getResolvedException()).getMessage();
         Assertions.assertEquals(expected, actual);
     }
