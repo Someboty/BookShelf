@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.bookshop.dto.cart.request.CreateCartItemDto;
+import com.bookshop.dto.cart.request.PutCartItemDto;
 import com.bookshop.dto.cart.response.CartDto;
 import com.bookshop.dto.cart.response.CartItemDto;
 import com.bookshop.dto.cart.response.CartItemDtoResponse;
@@ -192,6 +193,39 @@ public class CartServiceTests {
 
         Assertions.assertEquals(expected, actual);
         verify(cartRepository, times(TWICE)).getShoppingCartByUser_Id(userId);
+        verifyNoMoreInteractions(cartRepository);
+        verify(cartItemRepository, times(ONCE)).save(expectedItem);
+        verifyNoMoreInteractions(cartItemRepository);
+        verifyNoInteractions(bookMapper);
+        verify(cartItemMapper, times(ONCE)).toCreateDtoResponse(expectedItem);
+        verifyNoMoreInteractions(cartItemMapper);
+    }
+
+    @Test
+    @DisplayName("Update cart item with valid cart, user and existing book")
+    public void updateCartItem_ValidData_ReturnsCartItemDtoResponse() {
+        Long userId = ID_ONE;
+        ShoppingCart expectedCart = new ShoppingCart();
+        expectedCart.setId(userId);
+        User user = createUser();
+        expectedCart.setUser(user);
+        CartItem existingItem = createCartItem(expectedCart);
+        expectedCart.setCartItems(new HashSet<>(Set.of(existingItem)));
+        PutCartItemDto request = new PutCartItemDto();
+        request.setQuantity(5);
+        CartItem expectedItem = createCartItem(expectedCart);
+        expectedItem.setQuantity(request.getQuantity());
+        CartItemDtoResponse expected = mapCartItemToResponse(expectedItem);
+
+        when(cartRepository.getShoppingCartByUser_Id(userId)).thenReturn(Optional.of(expectedCart));
+        when(cartItemRepository.save(expectedItem)).thenReturn(expectedItem);
+        when(cartItemMapper.toCreateDtoResponse(expectedItem)).thenReturn(expected);
+
+        CartItemDtoResponse actual = cartService.updateCartItem(
+                userId, existingItem.getId(), request);
+
+        Assertions.assertEquals(expected, actual);
+        verify(cartRepository, times(ONCE)).getShoppingCartByUser_Id(userId);
         verifyNoMoreInteractions(cartRepository);
         verify(cartItemRepository, times(ONCE)).save(expectedItem);
         verifyNoMoreInteractions(cartItemRepository);
