@@ -98,6 +98,8 @@ public class CartControllerTests {
     @Test
     @WithUserDetails(value = "test@mail.com")
     @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql",
+            "classpath:database/books/remove-all-books-and-categories.sql",
+            "classpath:database/books/add-one-book-with-first-category.sql",
             "classpath:database/carts/add-one-user-with-cart-with-item.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql"},
@@ -141,6 +143,8 @@ public class CartControllerTests {
     @Test
     @WithUserDetails(value = "test@mail.com")
     @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql",
+            "classpath:database/books/remove-all-books-and-categories.sql",
+            "classpath:database/books/add-one-book-with-first-category.sql",
             "classpath:database/carts/add-one-user-with-cart-with-item.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql"},
