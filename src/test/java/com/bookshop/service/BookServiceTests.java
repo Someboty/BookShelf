@@ -1,5 +1,6 @@
 package com.bookshop.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -26,7 +27,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +40,7 @@ import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTests {
+    private static final String CANT_FIND_BOOK_MESSAGE = "Can't find book by id: ";
     private static final Long ID_ONE = 1L;
     private static final Long ID_TWO = 2L;
     private static final Long ID_THREE = 3L;
@@ -64,7 +65,6 @@ public class BookServiceTests {
     @Test
     @DisplayName("Save book by correct data")
     public void save_AllCorrectData_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto requestDto = createValidCreateBookRequestDto();
         Book expectedBookWithoutId = getBookFromCreateBookRequestDto(requestDto);
         Book expectedBookWithId = getBookFromCreateBookRequestDto(requestDto);
@@ -74,12 +74,10 @@ public class BookServiceTests {
         when(bookMapper.toEntity(requestDto)).thenReturn(expectedBookWithoutId);
         when(bookRepository.save(expectedBookWithoutId)).thenReturn(expectedBookWithId);
         when(bookMapper.toDto(expectedBookWithId)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.save(requestDto);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).save(expectedBookWithoutId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toEntity(requestDto);
@@ -88,12 +86,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Save book with no description,\s
-        check if correct data will be saved and returned
-            """)
+    @DisplayName("Save book with no description")
     public void save_WithoutDescription_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto requestDto = createValidCreateBookRequestDto();
         requestDto.setDescription(null);
         Book expectedBookWithoutId = getBookFromCreateBookRequestDto(requestDto);
@@ -104,12 +98,10 @@ public class BookServiceTests {
         when(bookMapper.toEntity(requestDto)).thenReturn(expectedBookWithoutId);
         when(bookRepository.save(expectedBookWithoutId)).thenReturn(expectedBookWithId);
         when(bookMapper.toDto(expectedBookWithId)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.save(requestDto);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).save(expectedBookWithoutId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toEntity(requestDto);
@@ -118,12 +110,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Save book with no cover image,\s
-        check if correct data will be saved and returned
-            """)
+    @DisplayName("Save book with no cover image")
     public void save_WithoutCoverImage_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto requestDto = createValidCreateBookRequestDto();
         requestDto.setCoverImage(null);
         Book expectedBookWithoutId = getBookFromCreateBookRequestDto(requestDto);
@@ -134,12 +122,10 @@ public class BookServiceTests {
         when(bookMapper.toEntity(requestDto)).thenReturn(expectedBookWithoutId);
         when(bookRepository.save(expectedBookWithoutId)).thenReturn(expectedBookWithId);
         when(bookMapper.toDto(expectedBookWithId)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.save(requestDto);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).save(expectedBookWithoutId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toEntity(requestDto);
@@ -148,12 +134,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Save book with empty categories id,\s
-        check if correct data will be saved and returned
-            """)
+    @DisplayName("Save book with empty categories id")
     public void save_WithEmptyCategoriesId_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto requestDto = createValidCreateBookRequestDto();
         requestDto.setCategoryIds(new HashSet<>());
         Book expectedBookWithoutId = getBookFromCreateBookRequestDto(requestDto);
@@ -164,12 +146,10 @@ public class BookServiceTests {
         when(bookMapper.toEntity(requestDto)).thenReturn(expectedBookWithoutId);
         when(bookRepository.save(expectedBookWithoutId)).thenReturn(expectedBookWithId);
         when(bookMapper.toDto(expectedBookWithId)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.save(requestDto);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).save(expectedBookWithoutId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toEntity(requestDto);
@@ -178,12 +158,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Save book with no description and cover image,\s
-        check if correct data will be saved and returned
-            """)
+    @DisplayName("Save book with no description and cover image")
     public void save_WithoutDescriptionAndCoverImage_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto requestDto = createValidCreateBookRequestDto();
         requestDto.setDescription(null);
         requestDto.setCoverImage(null);
@@ -195,12 +171,10 @@ public class BookServiceTests {
         when(bookMapper.toEntity(requestDto)).thenReturn(expectedBookWithoutId);
         when(bookRepository.save(expectedBookWithoutId)).thenReturn(expectedBookWithId);
         when(bookMapper.toDto(expectedBookWithId)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.save(requestDto);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).save(expectedBookWithoutId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toEntity(requestDto);
@@ -209,12 +183,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Save book with no description and cover image,\s
-        empty categories id, check if correct data will be saved and returned
-            """)
+    @DisplayName("Save book with no description and cover image, empty categories id")
     public void save_WithoutDescriptionAndCoverImageAndEmptyCategories_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto requestDto = createValidCreateBookRequestDto();
         requestDto.setDescription(null);
         requestDto.setCoverImage(null);
@@ -227,12 +197,10 @@ public class BookServiceTests {
         when(bookMapper.toEntity(requestDto)).thenReturn(expectedBookWithoutId);
         when(bookRepository.save(expectedBookWithoutId)).thenReturn(expectedBookWithId);
         when(bookMapper.toDto(expectedBookWithId)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.save(requestDto);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).save(expectedBookWithoutId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toEntity(requestDto);
@@ -241,12 +209,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Save book with no description and empty categories id,\s
-        check if correct data will be saved and returned
-            """)
+    @DisplayName("Save book with no description and empty categories id")
     public void save_WithoutDescriptionAndEmptyCategoriesId_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto requestDto = createValidCreateBookRequestDto();
         requestDto.setDescription(null);
         requestDto.setCategoryIds(new HashSet<>());
@@ -258,12 +222,10 @@ public class BookServiceTests {
         when(bookMapper.toEntity(requestDto)).thenReturn(expectedBookWithoutId);
         when(bookRepository.save(expectedBookWithoutId)).thenReturn(expectedBookWithId);
         when(bookMapper.toDto(expectedBookWithId)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.save(requestDto);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).save(expectedBookWithoutId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toEntity(requestDto);
@@ -272,12 +234,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Save book with no cover image and empty categories id,\s
-        check if correct data will be saved and returned
-            """)
+    @DisplayName("Save book with no cover image and empty categories id")
     public void save_WithoutCoverImageAndEmptyCategoriesId_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto requestDto = createValidCreateBookRequestDto();
         requestDto.setCoverImage(null);
         requestDto.setCategoryIds(new HashSet<>());
@@ -289,12 +247,10 @@ public class BookServiceTests {
         when(bookMapper.toEntity(requestDto)).thenReturn(expectedBookWithoutId);
         when(bookRepository.save(expectedBookWithoutId)).thenReturn(expectedBookWithId);
         when(bookMapper.toDto(expectedBookWithId)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.save(requestDto);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).save(expectedBookWithoutId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toEntity(requestDto);
@@ -303,24 +259,18 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Get correct book dto\s
-        when book with such id exists
-            """)
+    @DisplayName("Get correct book dto with correct id")
     public void getById_WithValidId_CorrectDtoReturned() {
-        //given
         Long bookId = ID_ONE;
         Book book = createValidBook(bookId);
         BookDto expected = getBookDtoFromBook(book);
 
         when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
         when(bookMapper.toDto(book)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.getById(bookId);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findById(bookId);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toDto(book);
@@ -328,35 +278,25 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Verify exception thrown\s
-        when book with such id doesn't exists
-            """)
+    @DisplayName("Try to get correct book dto with incorrect id")
     public void getById_WithInValidId_ExceptionThrown() {
-        //given
+        String expected = CANT_FIND_BOOK_MESSAGE + INCORRECT_ID;
 
         when(bookRepository.findById(INCORRECT_ID)).thenReturn(Optional.empty());
-
-        //when
+        
         Exception exception = assertThrows(EntityNotFoundException.class,
-                () -> bookService.getById(INCORRECT_ID)
-        );
-        //then
-        String expected = "Can't find book by id: " + INCORRECT_ID;
+                () -> bookService.getById(INCORRECT_ID));
+
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findById(INCORRECT_ID);
         verifyNoMoreInteractions(bookRepository);
         verifyNoInteractions(bookMapper);
     }
 
     @Test
-    @DisplayName("""
-        Verify the correct book dto was returned after updating\s
-        when book with such id exists
-            """)
+    @DisplayName("Update book with correct id")
     public void update_WithValidIdAndValidData_CorrectDtoReturned() {
-        //given
         CreateBookRequestDto request = createValidCreateBookRequestDto();
         Long bookId = ID_ONE;
         Book book = createValidBook(bookId);
@@ -377,12 +317,10 @@ public class BookServiceTests {
         }).when(bookMapper).setCategories(updatedBookWithoutCategories, request);
         when(bookRepository.save(updatedBook)).thenReturn(updatedBook);
         when(bookMapper.toDto(updatedBook)).thenReturn(expected);
-
-        //when
+        
         BookDto actual = bookService.update(bookId, request);
-
-        //then
-        Assertions.assertEquals(expected, actual);
+        
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findById(bookId);
         verify(bookRepository, times(ONCE)).save(updatedBook);
         verifyNoMoreInteractions(bookRepository);
@@ -392,66 +330,53 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("""
-        Verify the exception will be thrown after updating\s
-        when book with such id doesn't exists
-            """)
+    @DisplayName("Try to update book with incorrect id")
     public void update_WithInValidIdAndValidData_ExceptionThrown() {
-        //given
         CreateBookRequestDto request = createValidCreateBookRequestDto();
+        String expected = CANT_FIND_BOOK_MESSAGE + INCORRECT_ID;
 
         when(bookRepository.findById(INCORRECT_ID)).thenReturn(Optional.empty());
-
-        //when
-        Throwable exception = Assertions.assertThrows(EntityNotFoundException.class,
+        
+        Throwable exception = assertThrows(EntityNotFoundException.class,
                 () -> bookService.update(INCORRECT_ID, request));
 
-        //then
-        String expected = "Can't find book by id: " + INCORRECT_ID;
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findById(INCORRECT_ID);
         verifyNoMoreInteractions(bookRepository);
         verifyNoInteractions(bookMapper);
     }
 
     @Test
-    @DisplayName("Show list of 0 books")
+    @DisplayName("Find list of 0 books")
     public void findAll_NoBooksCorrectPageable_ReturnsEmptyList() {
-        //given
-
+        List<BookDto> expected = new ArrayList<>();
         when(bookRepository.findAll(STANDART_PAGEABLE)).thenReturn(Page.empty());
-
-        //when
+        
         List<BookDto> actual = bookService.findAll(STANDART_PAGEABLE);
 
-        //then
-        List<BookDto> expected = new ArrayList<>();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findAll(STANDART_PAGEABLE);
         verifyNoMoreInteractions(bookRepository);
         verifyNoInteractions(bookMapper);
     }
 
     @Test
-    @DisplayName("Show list of 1 book")
+    @DisplayName("Find list of 1 book")
     public void findAll_OneBookCorrectPageable_ReturnsCorrectList() {
-        //given
         Book book = createValidBook(ID_ONE);
         List<Book> books = List.of(book);
         Page<Book> page = new PageImpl<>(books, STANDART_PAGEABLE, books.size());
         BookDto bookDto = getBookDtoFromBook(book);
+        List<BookDto> expected = new ArrayList<>();
+        expected.add(bookDto);
 
         when(bookRepository.findAll(STANDART_PAGEABLE)).thenReturn(page);
         when(bookMapper.toDto(book)).thenReturn(bookDto);
-
-        //when
+        
         List<BookDto> actual = bookService.findAll(STANDART_PAGEABLE);
 
-        //then
-        List<BookDto> expected = new ArrayList<>();
-        expected.add(bookDto);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findAll(STANDART_PAGEABLE);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toDto(book);
@@ -459,18 +384,15 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("Verify no exceptions thrown with correct id")
+    @DisplayName("Delete book with correct id")
     public void deleteById_CorrectId_Success() {
-        //given
         Long bookId = ID_ONE;
 
         when(bookRepository.existsById(bookId)).thenReturn(true);
         doNothing().when(bookRepository).deleteById(bookId);
-
-        //when
+        
         bookService.deleteById(bookId);
-
-        //then
+        
         verify(bookRepository, times(ONCE)).existsById(bookId);
         verify(bookRepository, times(ONCE)).deleteById(bookId);
         verifyNoMoreInteractions(bookRepository);
@@ -478,44 +400,37 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("Verify exception thrown if book id is incorrect")
+    @DisplayName("Try to delete book with correct id")
     public void deleteById_InCorrectId_ThrowsException() {
-        //given
-
+        String excepted = CANT_FIND_BOOK_MESSAGE + INCORRECT_ID;
         when(bookRepository.existsById(INCORRECT_ID)).thenReturn(false);
-
-        //when
+        
         Throwable exception = assertThrows(EntityNotFoundException.class,
                 () -> bookService.deleteById(INCORRECT_ID));
 
-        //then
-        String excepted = "Can't find book by id: " + INCORRECT_ID;
         String actual = exception.getMessage();
-        Assertions.assertEquals(excepted, actual);
+        assertEquals(excepted, actual);
         verify(bookRepository, times(ONCE)).existsById(INCORRECT_ID);
         verifyNoMoreInteractions(bookRepository);
         verifyNoInteractions(bookMapper);
     }
 
     @Test
-    @DisplayName("Find one book with correct category")
+    @DisplayName("Find one book by category with correct category in db")
     public void getBooksByCategoryId_OneBookWithRightCategory_ReturnsCorrectList() {
-        //given
         Book book = createValidBook(ID_ONE);
         BookDtoWithoutCategoryIds bookDto = getDtoWithoutCategoryIds(book);
         Long categoryId = ID_TWO;
+        List<BookDtoWithoutCategoryIds> expected = List.of(bookDto);
 
         when(bookRepository.findAllByCategoryId(categoryId, STANDART_PAGEABLE))
                 .thenReturn(List.of(book));
         when(bookMapper.toDtoWithoutCategories(book)).thenReturn(bookDto);
-
-        //when
+        
         List<BookDtoWithoutCategoryIds> actual = bookService.getBooksByCategoryId(
                 categoryId, STANDART_PAGEABLE);
 
-        //then
-        List<BookDtoWithoutCategoryIds> expected = List.of(bookDto);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findAllByCategoryId(categoryId, STANDART_PAGEABLE);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(ONCE)).toDtoWithoutCategories(book);
@@ -523,9 +438,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("Find 5 books with correct category only")
+    @DisplayName("Find 5 books by category with correct category only in db")
     public void getBooksByCategoryId_FiveBooksWithRightCategory_ReturnsCorrectList() {
-        //given
         Book firstBook = createValidBook(ID_ONE);
         BookDtoWithoutCategoryIds firstBookDto = getDtoWithoutCategoryIds(firstBook);
         when(bookMapper.toDtoWithoutCategories(firstBook)).thenReturn(firstBookDto);
@@ -554,15 +468,13 @@ public class BookServiceTests {
 
         when(bookRepository.findAllByCategoryId(categoryId, STANDART_PAGEABLE))
                 .thenReturn(List.of(firstBook, secondBook, thirdBook, fourthBook, fifthBook));
-
-        //when
+        
         List<BookDtoWithoutCategoryIds> actual = bookService.getBooksByCategoryId(
                 categoryId, STANDART_PAGEABLE);
-
-        //then
+        
         List<BookDtoWithoutCategoryIds> expected = List.of(firstBookDto,
                 secondBookDto, thirdBookDto, fourthBookDto, fifthBookDto);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findAllByCategoryId(categoryId, STANDART_PAGEABLE);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(5)).toDtoWithoutCategories(any());
@@ -570,9 +482,8 @@ public class BookServiceTests {
     }
 
     @Test
-    @DisplayName("Find books with different categories")
+    @DisplayName("Find books by category with different categories in db")
     public void getBooksByCategoryId_BooksWithDifferentCategories_ReturnsCorrectList() {
-        //given
         Book firstBook = createValidBook(ID_ONE);
         BookDtoWithoutCategoryIds firstBookDto = getDtoWithoutCategoryIds(firstBook);
         when(bookMapper.toDtoWithoutCategories(firstBook)).thenReturn(firstBookDto);
@@ -595,39 +506,33 @@ public class BookServiceTests {
         BookDtoWithoutCategoryIds fifthBookDto = getDtoWithoutCategoryIds(fifthBook);
         when(bookMapper.toDtoWithoutCategories(fifthBook)).thenReturn(fifthBookDto);
 
-        Long categoryId = ID_TWO;
-
-        when(bookRepository.findAllByCategoryId(categoryId, STANDART_PAGEABLE))
+        when(bookRepository.findAllByCategoryId(ID_TWO, STANDART_PAGEABLE))
                 .thenReturn(List.of(firstBook, thirdBook, fifthBook));
-
-        //when
+        
         List<BookDtoWithoutCategoryIds> actual = bookService.getBooksByCategoryId(
-                categoryId, STANDART_PAGEABLE);
+                ID_TWO, STANDART_PAGEABLE);
 
-        //then
         List<BookDtoWithoutCategoryIds> expected = List.of(firstBookDto,
                 thirdBookDto, fifthBookDto);
-        Assertions.assertEquals(expected, actual);
-        verify(bookRepository, times(ONCE)).findAllByCategoryId(categoryId, STANDART_PAGEABLE);
+        assertEquals(expected, actual);
+        verify(bookRepository, times(ONCE)).findAllByCategoryId(ID_TWO, STANDART_PAGEABLE);
         verifyNoMoreInteractions(bookRepository);
         verify(bookMapper, times(3)).toDtoWithoutCategories(any());
         verifyNoMoreInteractions(bookMapper);
     }
 
     @Test
-    @DisplayName("Find one book with incorrect category")
+    @DisplayName("Try to find book from books with incorrect category in db")
     public void getBooksByCategoryId_OneBookWithIncorrectCategory_ReturnsEmptyList() {
-        //given
+        List<BookDtoWithoutCategoryIds> expected = new ArrayList<>();
 
         when(bookRepository.findAllByCategoryId(ID_ONE, STANDART_PAGEABLE))
                 .thenReturn(new ArrayList<>());
-        //when
+        
         List<BookDtoWithoutCategoryIds> actual = bookService.getBooksByCategoryId(
                 ID_ONE, STANDART_PAGEABLE);
 
-        //then
-        List<BookDtoWithoutCategoryIds> expected = new ArrayList<>();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(bookRepository, times(ONCE)).findAllByCategoryId(ID_ONE, STANDART_PAGEABLE);
         verifyNoMoreInteractions(bookRepository);
         verifyNoInteractions(bookMapper);

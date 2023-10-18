@@ -4,6 +4,7 @@ import com.bookshop.dto.cart.request.CreateCartItemDto;
 import com.bookshop.dto.cart.request.PutCartItemDto;
 import com.bookshop.dto.cart.response.CartDto;
 import com.bookshop.dto.cart.response.CartItemDtoResponse;
+import com.bookshop.exception.EntityNotFoundException;
 import com.bookshop.mapper.BookMapper;
 import com.bookshop.mapper.CartItemMapper;
 import com.bookshop.mapper.CartMapper;
@@ -15,7 +16,6 @@ import com.bookshop.repository.cart.item.CartItemRepository;
 import com.bookshop.repository.user.UserRepository;
 import com.bookshop.service.BookService;
 import com.bookshop.service.CartService;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,9 +45,12 @@ public class CartServiceImpl implements CartService {
         ShoppingCart cart = findCart(userId);
         Optional<CartItem> optionalCartItem = findCartItemByBookId(cart, request.getBookId());
         if (optionalCartItem.isPresent()) {
+            PutCartItemDto putCartItemDto = new PutCartItemDto();
+            putCartItemDto.setQuantity(
+                    request.getQuantity() + optionalCartItem.get().getQuantity());
             return updateCartItem(userId,
                     optionalCartItem.get().getId(),
-                    cartItemMapper.toPutDto(request));
+                    putCartItemDto);
         }
         checkIsBookValid(request.getBookId());
         CartItem item = new CartItem();
@@ -79,6 +82,7 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public void clearCart(Long userId) {
+        checkUserById(userId);
         cartItemRepository.deleteAllByShoppingCart(findCart(userId));
     }
 
@@ -92,7 +96,7 @@ public class CartServiceImpl implements CartService {
                 .equals(cartItemId))
                 .findFirst()
                 .orElseThrow(
-                    () -> new NoSuchElementException("Can't find cart item with id " + cartItemId)
+                    () -> new EntityNotFoundException("Can't find cart item by id: " + cartItemId)
         );
     }
 
@@ -106,7 +110,7 @@ public class CartServiceImpl implements CartService {
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new NoSuchElementException("Can't find a user with id "
+                () -> new EntityNotFoundException("Can't find user by id: "
                         + userId));
     }
 
@@ -120,5 +124,11 @@ public class CartServiceImpl implements CartService {
 
     private void checkIsBookValid(Long bookId) {
         bookService.checkBookById(bookId);
+    }
+
+    private void checkUserById(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new EntityNotFoundException("Can't find user by id: " + userId);
+        }
     }
 }
