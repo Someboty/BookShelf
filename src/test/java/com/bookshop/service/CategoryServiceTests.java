@@ -1,5 +1,6 @@
 package com.bookshop.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -18,7 +19,6 @@ import com.bookshop.service.impl.CategoryServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTests {
+    private static final String CANT_FIND_CATEGORY_MESSAGE = "Can't find category by id: ";
     private static final Long ID_ONE = 1L;
     private static final Long INCORRECT_ID = 100L;
     private static final int ONCE = 1;
@@ -60,7 +61,7 @@ public class CategoryServiceTests {
         
         CategoryDto actual = categoryService.save(requestDto);
         
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(categoryRepository, times(ONCE)).save(expectedCategoryWithoutId);
         verifyNoMoreInteractions(categoryRepository);
         verify(categoryMapper, times(ONCE)).toCategory(requestDto);
@@ -80,7 +81,7 @@ public class CategoryServiceTests {
         
         CategoryDto actual = categoryService.getById(categoryId);
         
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(categoryRepository, times(ONCE)).findById(categoryId);
         verifyNoMoreInteractions(categoryRepository);
         verify(categoryMapper, times(ONCE)).toDto(category);
@@ -90,7 +91,7 @@ public class CategoryServiceTests {
     @Test
     @DisplayName("Try to get category by incorrect id")
     public void getById_WithInValidId_ExceptionThrown() {
-        String expected = "Can't find category by id: " + INCORRECT_ID;
+        String expected = CANT_FIND_CATEGORY_MESSAGE + INCORRECT_ID;
 
         when(categoryRepository.findById(INCORRECT_ID)).thenReturn(Optional.empty());
         
@@ -99,7 +100,7 @@ public class CategoryServiceTests {
         );
 
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(categoryRepository, times(ONCE)).findById(INCORRECT_ID);
         verifyNoMoreInteractions(categoryRepository);
         verifyNoInteractions(categoryMapper);
@@ -120,7 +121,7 @@ public class CategoryServiceTests {
         
         CategoryDto actual = categoryService.update(categoryId, request);
         
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(categoryRepository, times(ONCE)).findById(categoryId);
         verify(categoryRepository, times(ONCE)).save(updatedCategory);
         verifyNoMoreInteractions(categoryRepository);
@@ -132,15 +133,15 @@ public class CategoryServiceTests {
     @DisplayName("Try to update category by incorrect id")
     public void update_WithInValidIdAndValidData_ExceptionThrown() {
         CategoryDtoRequest request = createValidCategoryDtoRequest();
-        String expected = "Can't find category by id: " + INCORRECT_ID;
+        String expected = CANT_FIND_CATEGORY_MESSAGE + INCORRECT_ID;
 
         when(categoryRepository.findById(INCORRECT_ID)).thenReturn(Optional.empty());
 
-        Throwable exception = Assertions.assertThrows(EntityNotFoundException.class,
+        Throwable exception = assertThrows(EntityNotFoundException.class,
                 () -> categoryService.update(INCORRECT_ID, request));
         
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(categoryRepository, times(ONCE)).findById(INCORRECT_ID);
         verifyNoMoreInteractions(categoryRepository);
         verifyNoInteractions(categoryMapper);
@@ -154,7 +155,7 @@ public class CategoryServiceTests {
         
         List<CategoryDto> actual = categoryService.findAll(STANDART_PAGEABLE);
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(categoryRepository, times(ONCE)).findAll(STANDART_PAGEABLE);
         verifyNoMoreInteractions(categoryRepository);
         verifyNoInteractions(categoryMapper);
@@ -175,7 +176,7 @@ public class CategoryServiceTests {
         
         List<CategoryDto> actual = categoryService.findAll(STANDART_PAGEABLE);
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(categoryRepository, times(ONCE)).findAll(STANDART_PAGEABLE);
         verifyNoMoreInteractions(categoryRepository);
         verify(categoryMapper, times(ONCE)).toDto(category);
@@ -201,14 +202,14 @@ public class CategoryServiceTests {
     @Test
     @DisplayName("Try to delete category by incorrect id")
     public void deleteById_InCorrectId_ThrowsException() {
-        String excepted = "Can't find category by id: " + INCORRECT_ID;
+        String excepted = CANT_FIND_CATEGORY_MESSAGE + INCORRECT_ID;
         when(categoryRepository.existsById(INCORRECT_ID)).thenReturn(false);
         
         Throwable exception = assertThrows(EntityNotFoundException.class,
                 () -> categoryService.deleteById(INCORRECT_ID));
 
         String actual = exception.getMessage();
-        Assertions.assertEquals(excepted, actual);
+        assertEquals(excepted, actual);
         verify(categoryRepository, times(ONCE)).existsById(INCORRECT_ID);
         verifyNoMoreInteractions(categoryRepository);
         verifyNoInteractions(categoryMapper);

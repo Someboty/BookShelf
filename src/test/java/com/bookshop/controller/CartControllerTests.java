@@ -34,6 +34,20 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CartControllerTests {
     protected static MockMvc mockMvc;
+    private static final String TEST_USER_CREDENTIALS = "test@mail.com";
+    private static final String ADD_ONE_BOOK_WITH_CATEGORY =
+            "classpath:database/books/add-one-book-with-first-category.sql";
+    private static final String REMOVE_ALL_BOOKS_AND_CATEGORIES =
+            "classpath:database/books/remove-all-books-and-categories.sql";
+    private static final String ADD_USER_WITH_EMPTY_CART =
+            "classpath:database/carts/add-one-user-with-empty-cart.sql";
+    private static final String ADD_USER_WITH_CART_ITEM =
+            "classpath:database/carts/add-one-user-with-cart-with-item.sql";
+    private static final String REMOVE_ALL_USERS_AND_CART_ITEMS =
+            "classpath:database/carts/remove-all-users-carts-items.sql";
+    private static final long VALID_ID = 1L;
+    private static final int BASE_QUANTITY = 5;
+    private static final int UPDATED_QUANTITY = 10;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -47,11 +61,11 @@ public class CartControllerTests {
     }
 
     @Test
-    @WithUserDetails(value = "test@mail.com")
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql",
-            "classpath:database/carts/add-one-user-with-cart-with-item.sql"},
+    @WithUserDetails(value = TEST_USER_CREDENTIALS)
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS,
+            ADD_USER_WITH_CART_ITEM},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql"},
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Get cart by user")
     public void getCartInfo_CorrectData_ReturnsCorrectDto() throws Exception {
@@ -68,13 +82,13 @@ public class CartControllerTests {
     }
 
     @Test
-    @WithUserDetails(value = "test@mail.com")
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql",
-            "classpath:database/books/remove-all-books-and-categories.sql",
-            "classpath:database/carts/add-one-user-with-empty-cart.sql",
-            "classpath:database/books/add-one-book-with-first-category.sql"},
+    @WithUserDetails(value = TEST_USER_CREDENTIALS)
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS,
+            REMOVE_ALL_BOOKS_AND_CATEGORIES,
+            ADD_USER_WITH_EMPTY_CART,
+            ADD_ONE_BOOK_WITH_CATEGORY},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql"},
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Create cart item by correct data")
     public void createCartItem_CorrectData_ReturnsCorrectDto() throws Exception {
@@ -96,13 +110,13 @@ public class CartControllerTests {
     }
 
     @Test
-    @WithUserDetails(value = "test@mail.com")
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql",
-            "classpath:database/books/remove-all-books-and-categories.sql",
-            "classpath:database/books/add-one-book-with-first-category.sql",
-            "classpath:database/carts/add-one-user-with-cart-with-item.sql"},
+    @WithUserDetails(value = TEST_USER_CREDENTIALS)
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS,
+            REMOVE_ALL_BOOKS_AND_CATEGORIES,
+            ADD_ONE_BOOK_WITH_CATEGORY,
+            ADD_USER_WITH_CART_ITEM},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql"},
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Update cart item by correct data")
     public void updateCartItem_CorrectData_ReturnsCorrectDto() throws Exception {
@@ -111,7 +125,7 @@ public class CartControllerTests {
         CartItemDtoResponse expected =
                 mapCartItemDtoResponseFromCreateCartItemDto(createCartItemDto());
         expected.setQuantity(request.getQuantity());
-        expected.setId(1L);
+        expected.setId(VALID_ID);
 
         MvcResult result = mockMvc.perform(put("/cart/cart-items/1")
                         .content(jsonRequest)
@@ -127,11 +141,11 @@ public class CartControllerTests {
     }
 
     @Test
-    @WithUserDetails(value = "test@mail.com")
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql",
-            "classpath:database/carts/add-one-user-with-cart-with-item.sql"},
+    @WithUserDetails(value = TEST_USER_CREDENTIALS)
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS,
+            ADD_USER_WITH_CART_ITEM},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql"},
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Delete cart item by correct data")
     public void deleteCartItem_CorrectData_Success() throws Exception {
@@ -141,13 +155,13 @@ public class CartControllerTests {
     }
 
     @Test
-    @WithUserDetails(value = "test@mail.com")
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql",
-            "classpath:database/books/remove-all-books-and-categories.sql",
-            "classpath:database/books/add-one-book-with-first-category.sql",
-            "classpath:database/carts/add-one-user-with-cart-with-item.sql"},
+    @WithUserDetails(value = TEST_USER_CREDENTIALS)
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS,
+            REMOVE_ALL_BOOKS_AND_CATEGORIES,
+            ADD_ONE_BOOK_WITH_CATEGORY,
+            ADD_USER_WITH_CART_ITEM},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {"classpath:database/carts/remove-all-users-carts-items.sql"},
+    @Sql(scripts = {REMOVE_ALL_USERS_AND_CART_ITEMS},
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Clear cart")
     public void clearCart_CorrectData_Success() throws Exception {
@@ -158,26 +172,26 @@ public class CartControllerTests {
 
     private CartDto cartDtoFromDb() {
         CartDto cartDto = new CartDto();
-        cartDto.setId(1L);
-        cartDto.setUserId(1L);
+        cartDto.setId(VALID_ID);
+        cartDto.setUserId(VALID_ID);
         CartItemDto item = new CartItemDto();
-        item.setId(1L);
-        item.setBookId(1L);
-        item.setQuantity(5);
+        item.setId(VALID_ID);
+        item.setBookId(VALID_ID);
+        item.setQuantity(BASE_QUANTITY);
         cartDto.setCartItems(new HashSet<>(Set.of(item)));
         return cartDto;
     }
 
     private CreateCartItemDto createCartItemDto() {
         CreateCartItemDto request = new CreateCartItemDto();
-        request.setBookId(1L);
-        request.setQuantity(5);
+        request.setBookId(VALID_ID);
+        request.setQuantity(BASE_QUANTITY);
         return request;
     }
 
     private PutCartItemDto putCartItemDto() {
         PutCartItemDto request = new PutCartItemDto();
-        request.setQuantity(10);
+        request.setQuantity(UPDATED_QUANTITY);
         return request;
     }
 

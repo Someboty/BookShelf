@@ -96,7 +96,7 @@ public class CartServiceImpl implements CartService {
                 .equals(cartItemId))
                 .findFirst()
                 .orElseThrow(
-                    () -> new EntityNotFoundException("Can't find cart item with id: " + cartItemId)
+                    () -> new EntityNotFoundException("Can't find cart item by id: " + cartItemId)
         );
     }
 
@@ -110,7 +110,7 @@ public class CartServiceImpl implements CartService {
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find a user with id: "
+                () -> new EntityNotFoundException("Can't find user by id: "
                         + userId));
     }
 

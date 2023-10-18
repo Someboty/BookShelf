@@ -1,5 +1,6 @@
 package com.bookshop.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -31,7 +32,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +41,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class CartServiceTests {
+    private static final String CANT_FIND_USER_MESSAGE = "Can't find user by id: ";
+    private static final String CANT_FIND_CART_ITEM_MESSAGE = "Can't find cart item by id: ";
     private static final Long ID_ONE = 1L;
     private static final Long ID_INVALID = 42L;
     private static final int ONCE = 1;
@@ -83,8 +85,8 @@ public class CartServiceTests {
         
         CartDto actual = cartService.getCartInfo(userId);
 
-        Assertions.assertEquals(expected, actual);
-        Assertions.assertEquals(expected.getCartItems(), actual.getCartItems());
+        assertEquals(expected, actual);
+        assertEquals(expected.getCartItems(), actual.getCartItems());
         verify(cartRepository, times(ONCE)).getShoppingCartByUser_Id(userId);
         verifyNoMoreInteractions(cartRepository);
         verify(cartMapper, times(ONCE)).toCartDto(expectedCart);
@@ -108,8 +110,8 @@ public class CartServiceTests {
         
         CartDto actual = cartService.getCartInfo(userId);
         
-        Assertions.assertEquals(expected, actual);
-        Assertions.assertEquals(expected.getCartItems(), actual.getCartItems());
+        assertEquals(expected, actual);
+        assertEquals(expected.getCartItems(), actual.getCartItems());
         verify(cartRepository, times(ONCE)).getShoppingCartByUser_Id(userId);
         verify(cartRepository, times(ONCE)).save(expectedCart);
         verifyNoMoreInteractions(cartRepository);
@@ -121,15 +123,15 @@ public class CartServiceTests {
     @DisplayName("Try to get a cart by non existing user")
     public void getCartInfo_GetCartFromNonExistingUserId_ExceptionThrown() {
         Long userId = ID_INVALID;
-        String expected = "Can't find a user with id: " + ID_INVALID;
+        String expected = CANT_FIND_USER_MESSAGE + ID_INVALID;
         when(cartRepository.getShoppingCartByUser_Id(userId)).thenReturn(Optional.empty());
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         
-        Throwable exception = Assertions.assertThrows(EntityNotFoundException.class,
+        Throwable exception = assertThrows(EntityNotFoundException.class,
                 () -> cartService.getCartInfo(ID_INVALID));
 
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(cartRepository, times(ONCE)).getShoppingCartByUser_Id(userId);
         verify(userRepository, times(ONCE)).findById(userId);
         verifyNoMoreInteractions(cartRepository);
@@ -158,7 +160,7 @@ public class CartServiceTests {
 
         CartItemDtoResponse actual = cartService.createCartItem(userId, request);
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(cartRepository, times(ONCE)).getShoppingCartByUser_Id(userId);
         verifyNoMoreInteractions(cartRepository);
         verify(cartItemRepository, times(ONCE)).save(expectedItem);
@@ -191,7 +193,7 @@ public class CartServiceTests {
 
         CartItemDtoResponse actual = cartService.createCartItem(userId, request);
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(cartRepository, times(TWICE)).getShoppingCartByUser_Id(userId);
         verifyNoMoreInteractions(cartRepository);
         verify(cartItemRepository, times(ONCE)).save(expectedItem);
@@ -224,7 +226,7 @@ public class CartServiceTests {
         CartItemDtoResponse actual = cartService.updateCartItem(
                 userId, existingItem.getId(), request);
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(cartRepository, times(ONCE)).getShoppingCartByUser_Id(userId);
         verifyNoMoreInteractions(cartRepository);
         verify(cartItemRepository, times(ONCE)).save(expectedItem);
@@ -267,7 +269,7 @@ public class CartServiceTests {
         expectedCart.setCartItems(new HashSet<>(Set.of(expectedItem)));
         User user = createUser();
         expectedCart.setUser(user);
-        String expected = "Can't find cart item with id: " + ID_INVALID;
+        String expected = CANT_FIND_CART_ITEM_MESSAGE + ID_INVALID;
 
         when(cartRepository.getShoppingCartByUser_Id(userId)).thenReturn(Optional.of(expectedCart));
         
@@ -275,7 +277,7 @@ public class CartServiceTests {
                 () -> cartService.removeCartItem(userId, ID_INVALID));
         
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(cartRepository, times(ONCE)).getShoppingCartByUser_Id(userId);
         verifyNoMoreInteractions(cartRepository);
         verifyNoInteractions(bookMapper);
@@ -285,7 +287,7 @@ public class CartServiceTests {
     @DisplayName("Try to delete item with incorrect user id")
     public void removeCartItem_IncorrectUserId_ExceptionThrown() {
         Long userId = ID_INVALID;
-        String expected = "Can't find a user with id: " + ID_INVALID;
+        String expected = CANT_FIND_USER_MESSAGE + ID_INVALID;
 
         when(cartRepository.getShoppingCartByUser_Id(userId)).thenReturn(Optional.empty());
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -294,7 +296,7 @@ public class CartServiceTests {
                 () -> cartService.removeCartItem(userId, ID_ONE));
         
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(cartRepository, times(ONCE)).getShoppingCartByUser_Id(userId);
         verifyNoMoreInteractions(cartRepository);
         verify(userRepository, times(ONCE)).findById(userId);
@@ -325,7 +327,7 @@ public class CartServiceTests {
     @DisplayName("Try to clear cart by incorrect user id")
     public void clearCart_IncorrectUserId_ExceptionThrown() {
         Long userId = ID_INVALID;
-        String expected = "Can't find user by id: " + ID_INVALID;
+        String expected = CANT_FIND_USER_MESSAGE + ID_INVALID;
 
         when(userRepository.existsById(userId)).thenReturn(false);
 
@@ -333,7 +335,7 @@ public class CartServiceTests {
                 () -> cartService.clearCart(userId));
 
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(userRepository, times(ONCE)).existsById(userId);
         verifyNoMoreInteractions(userRepository);
         verifyNoInteractions(cartItemRepository);
