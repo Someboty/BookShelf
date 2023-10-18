@@ -1,24 +1,40 @@
-<h1 align="center">BookShop</h1>
-<h3 align="center">Your Online Book Store – Java Spring Project</h3>
+[![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](http://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/built-with-grammas-recipe.svg)](http://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](http://forthebadge.com)
 
-Welcome to the BookShop project! This README will guide you through the setup, structure, and functionality of my Java Spring-based online bookstore application. My aim is to create a seamless platform for users to browse, purchase, and manage books, while administrators maintain control over inventory and orders.
+<h3>Welcome to the BookShop project!</h3> This README will guide you through the setup, structure, and functionality of my Java Spring-based online bookstore application. My aim is to create a seamless platform for users to browse, purchase, and manage books, while administrators maintain control over inventory and orders.
 
 
 ## Table of Contents
-* [1. Project Overview <a name="project-overview"></a>](#1-project-overview-a-nameproject-overviewa)
-* [2. Entities <a name="entities"></a>](#2-entities-a-nameentitiesa)
-* [3. Features <a name="features"></a>](#3-features-a-namefeaturesa)
-* [4. Getting Started <a name="getting-started"></a>](#4-getting-started-a-namegetting-starteda)
-* [5. Docker <a name="docker"></a>](#5-docker-a-namedockera)
-* [6. Swagger <a name="swagger"></a>](#6-swagger-a-nameswaggera)
-* [7. Contributing <a name="contributing"></a>](#7-contributing-a-namecontributinga)
-* [8. License <a name="license"></a>](#8-license-a-namelicensea)
+* [❓ Project Overview <a name="project-overview"></a>](#project-overview-a-nameproject-overviewa)
+* [👨‍💻Tech stack](#tech-stack)
+* [📝Entities <a name="entities"></a>](#entities-a-nameentitiesa)
+* [🔧Features <a name="features"></a>](#features-a-namefeaturesa)
+* [⚡️Getting Started <a name="getting-started"></a>](#getting-started-a-namegetting-starteda)
+* [📚 Swagger <a name="swagger"></a>](#swagger-a-nameswaggera)
+* [🔨 Contributing <a name="contributing"></a>](#contributing-a-namecontributinga)
+* [💼 License <a name="license"></a>](#license-a-namelicensea)
 
-## 1. Project Overview <a name="project-overview"></a>
+## ❓Project Overview <a name="project-overview"></a>
 
 The BookShop project is a web-based REST application developed using Java Spring. It provides a platform for both shoppers and managers to interact with books, shopping carts, orders, and inventory. The project will be developed incrementally, with features broken down into manageable parts.
 
-## 2. Entities <a name="entities"></a>
+## 👨‍💻Tech stack
+
+Here's a brief high-level overview of the tech stack the **BookShop API** uses:
+
+- [Spring Boot](https://spring.io/projects/spring-boot): provides a set of pre-built templates and conventions for creating stand-alone, production-grade Spring-based applications.
+- [Spring Security](https://docs.spring.io/spring-security/reference/index.html): provides features like authentication, authorization, and protection against common security threats.
+- [Spring Web](https://spring.io/projects/spring-ws#overview): includes tools for handling HTTP requests, managing sessions, and processing web-related tasks.
+- [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/): provides a higher-level abstraction for working with databases and includes support for JPA (Java Persistence API).
+- [Hibernate](https://hibernate.org/): simplifies the interaction between Java applications and databases by mapping Java objects to database tables and vice versa.
+- [Lombok](https://projectlombok.org/): helps reduce boilerplate code by automatically generating common code constructs (like getters, setters, constructors, etc.) during compile time.
+- [Mapstruct](https://mapstruct.org/): generates mapping code based on annotations, reducing the need for manual, error-prone mapping code.
+- [Liquibase](https://www.liquibase.org/): helps manage database schema changes over time, making it easier to track and deploy database updates.
+- [Swagger](https://swagger.io/): provides a framework for generating interactive API documentation, allowing developers to understand, test, and use APIs more easily.
+- [Docker](https://www.docker.com/): provides a consistent and reproducible way to deploy applications across different environments.
+
+## 📝Entities <a name="entities"></a>
 
 The following domain models (entities) are central to this application:
 
@@ -31,7 +47,7 @@ The following domain models (entities) are central to this application:
 - **Order**: Represents an order placed by a user.
 - **OrderItem**: Represents an item in a user's order.
 
-## 3. Features <a name="features"></a>
+##  🔧Features <a name="features"></a>
 ### Shoppers Can:
 
 - **Join and Sign In**: Users can register and sign in to browse and purchase books.
@@ -47,47 +63,44 @@ The following domain models (entities) are central to this application:
 - **Manage Receipts**: Managers can change the status of order receipts, such as marking them as “Shipped” or “Delivered”.
 
 ### Admins Can:
-- **Manage Users**: Admins can create users with specific role
+- **Manage Users**: Admins can create users with specific role and change users roles
 
-## 4. Getting Started <a name="getting-started"></a>
+## ⚡️Getting Started <a name="getting-started"></a>
 
-To get started with my Online Book Store project, follow these steps:
+First, let's download a [repository](https://github.com/Someboty/bookShop).
 
-1. **Clone the Repository**: Clone this GitHub repository to your local machine.
+Via IDE:
+- Open IntelliJ IDEA.
+- Select "File" -> "New Project from Version Control."
+- Paste the link: https://github.com/Someboty/bookShop.git
 
-2. **Install Dependencies**: Ensure you have Java Spring and necessary dependencies installed.
+Via git console command:
 
-3. **Database Configuration**: Configure the database connection settings in the application properties.
+*I'll use "d:\Projects" as example of project's location. You can replace it with another folder on your device*
 
-4. **Run the Application**: Start the Spring application and access it through your web browser.
+```bash
+cd d:\Projects
+git clone https://github.com/Someboty/bookShop.git
+cd d:\Projects\bookShop
+.\mvnw.cmd clean package
+```
+Now we have only to launch app! We can use this command:
 
-## 5. Docker <a name="docker"></a>
+```bash
+docker-compose up
+```
+That's all you need to know to start! 🎉
 
-Project also offers a Docker containerized version of this application. To run it using Docker, follow these additional steps:
-
-1. **Docker Setup**: Install Docker on your machine if not already installed.
-
-2. **Add necessary dependency**: Add this lines at pom.xml in <dependencies> section:
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-docker-compose</artifactId>
-        </dependency>
-
-3. **Build Docker Image**: Build the Docker image using the provided Dockerfile.
-
-4. **Run Docker Container**: Run the Docker container, ensuring it's connected to the database.
-
-# 6. Swagger <a name="swagger"></a>
+# 📚Swagger <a name="swagger"></a>
 
 I have integrated Swagger for easy API documentation. To access the API documentation after running the application, visit the [Swagger API documentation](http://localhost:8080/swagger-ui.html).
 
-# 7. Contributing <a name="contributing"></a>
+# 🔨Contributing <a name="contributing"></a>
 
 We welcome contributions from the community! If you want to contribute to the BookShop project, please contact us via [email](mailto:vladyslavihnatiuk@gmail.com) or leave a suggestion on the [project page](https://github.com/Someboty/bookShop). 
 
-# 8. License <a name="license"></a>
+# 💼License <a name="license"></a>
 
 This project is licensed under the MIT License, which means you can use, modify, and distribute it for personal or commercial purposes.
 
-Thank you for considering my Online BookShop project. I hope it serves as a valuable learning resource and proof of my skills for potential interviewers. Happy coding!
+**Thank you for considering my Online BookShop project. I hope it serves as a valuable learning resource and proof of my skills for potential interviewers. Happy coding!**
