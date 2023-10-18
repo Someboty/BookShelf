@@ -1,6 +1,6 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](http://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/built-with-grammas-recipe.svg)](http://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](http://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/powered-by-responsibility.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/docker-container.svg)](https://forthebadge.com)
 
 <h3>Welcome to the BookShop project!</h3> This README will guide you through the setup, structure, and functionality of my Java Spring-based online bookstore application. My aim is to create a seamless platform for users to browse, purchase, and manage books, while administrators maintain control over inventory and orders.
 
