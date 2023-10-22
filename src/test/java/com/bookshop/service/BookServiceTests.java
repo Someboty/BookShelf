@@ -590,7 +590,6 @@ public class BookServiceTests {
         return book;
     }
 
-
     private BookSearchParameters createSearchParam() {
         BookSearchParameters parameters = new BookSearchParameters();
         String[] titles = new String[1];
