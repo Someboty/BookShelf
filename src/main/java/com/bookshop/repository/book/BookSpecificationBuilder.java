@@ -21,16 +21,20 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     public Specification<Book> build(BookSearchParameters bookSearchParameters) {
         Specification<Book> specification = Specification.where(null);
         if (isParameterPresent(bookSearchParameters.getTitles())) {
-            addSpecification(specification, TITLE_KEY, bookSearchParameters.getTitles());
+            specification =
+                    addSpecification(specification, TITLE_KEY, bookSearchParameters.getTitles());
         }
         if (isParameterPresent(bookSearchParameters.getAuthors())) {
-            addSpecification(specification, AUTHOR_KEY, bookSearchParameters.getAuthors());
+            specification =
+                    addSpecification(specification, AUTHOR_KEY, bookSearchParameters.getAuthors());
         }
         if (isParameterPresent(bookSearchParameters.getIsbn())) {
-            addSpecification(specification, ISBN_KEY, bookSearchParameters.getIsbn());
+            specification =
+                    addSpecification(specification, ISBN_KEY, bookSearchParameters.getIsbn());
         }
         if (isParameterPresent(bookSearchParameters.getPrice())) {
-            addSpecification(specification, PRICE_KEY, bookSearchParameters.getPrice());
+            specification =
+                    addSpecification(specification, PRICE_KEY, bookSearchParameters.getPrice());
         }
         return specification;
     }
@@ -39,8 +43,9 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
         return param != null && param.length > 0;
     }
 
-    private void addSpecification(Specification<Book> specification, String key, String[] params) {
-        specification.and(bookSpecificationProviderManager
+    private Specification<Book> addSpecification(
+            Specification<Book> specification, String key, String[] params) {
+        return specification.and(bookSpecificationProviderManager
                 .getSpecificationProvider(key).getSpecification(params));
     }
 }
