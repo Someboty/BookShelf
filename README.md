@@ -7,10 +7,12 @@
 
 ## Table of Contents
 * [❓ Project Overview <a name="project-overview"></a>](#project-overview-a-nameproject-overviewa)
-* [👨‍💻Tech stack](#tech-stack)
-* [📝Entities <a name="entities"></a>](#entities-a-nameentitiesa)
-* [🔧Features <a name="features"></a>](#features-a-namefeaturesa)
-* [⚡️Getting Started <a name="getting-started"></a>](#getting-started-a-namegetting-starteda)
+* [👨‍💻 Tech stack](#tech-stack)
+* [📝 Entities <a name="entities"></a>](#entities-a-nameentitiesa)
+* [🔧 Features <a name="features"></a>](#features-a-namefeaturesa)
+* [⚡️ Getting Started <a name="getting-started"></a>](#getting-started-a-namegetting-starteda)
+* [🎥 Video Presentation <a name="presentation"></a>](#video-presentation)
+* [📮 Postman Collection <a name="postman"></a>](#postman-collection)
 * [📚 Swagger <a name="swagger"></a>](#swagger-a-nameswaggera)
 * [🔨 Contributing <a name="contributing"></a>](#contributing-a-namecontributinga)
 * [💼 License <a name="license"></a>](#license-a-namelicensea)
@@ -90,6 +92,14 @@ Now we have only to launch app! We can use this command:
 docker-compose up
 ```
 That's all you need to know to start! 🎉
+
+# 🎥Video Presentation
+
+"Seeing is believing"? Sure, you can see a brief demonstration of my project by clicking on [this link](https://www.loom.com/share/b35ea76355f54be680dbcad82d3f6360). This way, you can get a firsthand look at how it works and the results it can achieve. Don't just take my word for it – experience it yourself!
+
+# 📮Postman Collection
+
+I've put together a handy Postman collection to simplify and speed up the process of testing my API and engaging with my application. To access the collection, just click on this [link](https://github.com/Someboty/bookShop/blob/master/src/main/resources/book_app.postman_collection.json). It's a convenient tool that will make your experience smoother and more efficient. Happy testing!
 
 # 📚Swagger <a name="swagger"></a>
 
