@@ -1,0 +1,46 @@
+package com.bookshelf.repository.book;
+
+import com.bookshelf.dto.book.request.BookSearchParameters;
+import com.bookshelf.model.Book;
+import com.bookshelf.repository.SpecificationBuilder;
+import com.bookshelf.repository.SpecificationProviderManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
+    private static final String TITLE_KEY = "title";
+    private static final String AUTHOR_KEY = "author";
+    private static final String ISBN_KEY = "isbn";
+    private static final String PRICE_KEY = "price";
+    private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
+
+    @Override
+    public Specification<Book> build(BookSearchParameters bookSearchParameters) {
+        Specification<Book> specification = Specification.where(null);
+        if (isParameterPresent(bookSearchParameters.getTitles())) {
+            addSpecification(specification, TITLE_KEY, bookSearchParameters.getTitles());
+        }
+        if (isParameterPresent(bookSearchParameters.getAuthors())) {
+            addSpecification(specification, AUTHOR_KEY, bookSearchParameters.getAuthors());
+        }
+        if (isParameterPresent(bookSearchParameters.getIsbn())) {
+            addSpecification(specification, ISBN_KEY, bookSearchParameters.getIsbn());
+        }
+        if (isParameterPresent(bookSearchParameters.getPrice())) {
+            addSpecification(specification, PRICE_KEY, bookSearchParameters.getPrice());
+        }
+        return specification;
+    }
+
+    private boolean isParameterPresent(String[] param) {
+        return param != null && param.length > 0;
+    }
+
+    private void addSpecification(Specification<Book> specification, String key, String[] params) {
+        specification.and(bookSpecificationProviderManager
+                .getSpecificationProvider(key).getSpecification(params));
+    }
+}

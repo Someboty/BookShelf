@@ -2,7 +2,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/powered-by-responsibility.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/docker-container.svg)](https://forthebadge.com)
 
-<h3>Welcome to the BookShop project!</h3> This README will guide you through the setup, structure, and functionality of my Java Spring-based online bookstore application. My aim is to create a seamless platform for users to browse, purchase, and manage books, while administrators maintain control over inventory and orders.
+<h3>Welcome to the BookShelf project!</h3> This README will guide you through the setup, structure, and functionality of my Java Spring-based online bookstore application. My aim is to create a seamless platform for users to browse, purchase, and manage books, while administrators maintain control over inventory and orders.
 
 
 ## Table of Contents
@@ -19,11 +19,11 @@
 
 ## ❓Project Overview <a name="project-overview"></a>
 
-The BookShop project is a web-based REST application developed using Java Spring. It provides a platform for both shoppers and managers to interact with books, shopping carts, orders, and inventory. The project will be developed incrementally, with features broken down into manageable parts.
+The BookShelf project is a web-based REST application developed using Java Spring. It provides a platform for both shoppers and managers to interact with books, shopping carts, orders, and inventory. The project will be developed incrementally, with features broken down into manageable parts.
 
 ## 👨‍💻Tech stack
 
-Here's a brief high-level overview of the tech stack the **BookShop API** uses:
+Here's a brief high-level overview of the tech stack the **BookShelf API** uses:
 
 - [Spring Boot](https://spring.io/projects/spring-boot): provides a set of pre-built templates and conventions for creating stand-alone, production-grade Spring-based applications.
 - [Spring Security](https://docs.spring.io/spring-security/reference/index.html): provides features like authentication, authorization, and protection against common security threats.
@@ -107,10 +107,10 @@ I have integrated Swagger for easy API documentation. To access the API document
 
 # 🔨Contributing <a name="contributing"></a>
 
-We welcome contributions from the community! If you want to contribute to the BookShop project, please contact us via [email](mailto:vladyslavihnatiuk@gmail.com) or leave a suggestion on the [project page](https://github.com/Someboty/bookShop). 
+We welcome contributions from the community! If you want to contribute to the BookShelf project, please contact us via [email](mailto:vladyslavihnatiuk@gmail.com) or leave a suggestion on the [project page](https://github.com/Someboty/bookShop). 
 
 # 💼License <a name="license"></a>
 
 This project is licensed under the MIT License, which means you can use, modify, and distribute it for personal or commercial purposes.
 
-**Thank you for considering my Online BookShop project. I hope it serves as a valuable learning resource and proof of my skills for potential interviewers. Happy coding!**
+**Thank you for considering my Online BookShelf project. I hope it serves as a valuable learning resource and proof of my skills for potential interviewers. Happy coding!**
