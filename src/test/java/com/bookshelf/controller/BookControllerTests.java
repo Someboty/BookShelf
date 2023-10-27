@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bookshelf.dto.book.request.BookSearchParameters;
 import com.bookshelf.dto.book.request.CreateBookRequestDto;
 import com.bookshelf.dto.book.response.BookDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -332,7 +333,7 @@ public class BookControllerTests {
                 "Annotation",
                 "scary url",
                 new HashSet<>(Set.of(CORRECT_ID_ONE)));
-        
+
         MvcResult result = mockMvc.perform(get("/books/1"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -695,6 +696,35 @@ public class BookControllerTests {
         assertEquals(expected, actual);
     }
 
+    @Test
+    @WithMockUser(username = TEST_USER_CREDENTIALS)
+    @DisplayName("Get book by search params")
+    @Sql(scripts = {REMOVE_ALL_BOOKS_AND_CATEGORIES,
+            ADD_ONE_BOOK_WITH_CATEGORY},
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void search_GetBookByParams_ReturnsBookDto() throws Exception {
+        BookSearchParameters parameters = createSearchParam();
+        BookDto expectedBook = bookDtoConstructor(
+                CORRECT_ID_ONE,
+                "The Book",
+                "Modest Author",
+                "978-3-16-148410-0",
+                BigDecimal.valueOf(19.95),
+                "Annotation",
+                "scary url",
+                new HashSet<>(Set.of(CORRECT_ID_ONE)));
+        List<BookDto> expected = List.of(expectedBook);
+
+        MvcResult result = mockMvc.perform(get("/books/search")
+                        .queryParam("titles", parameters.getTitles()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<BookDto> actual = objectMapper.readValue(result.getResponse().getContentAsString(),
+                new TypeReference<>(){});
+        assertEquals(expected, actual);
+    }
+
     private CreateBookRequestDto createBookRequest() {
         CreateBookRequestDto requestDto = new CreateBookRequestDto();
         requestDto.setTitle("The Mysterious Book");
@@ -705,6 +735,14 @@ public class BookControllerTests {
         requestDto.setCoverImage("working url");
         requestDto.setCategoryIds(new HashSet<>(Set.of(CORRECT_ID_ONE)));
         return requestDto;
+    }
+
+    private BookSearchParameters createSearchParam() {
+        BookSearchParameters parameters = new BookSearchParameters();
+        String[] titles = new String[1];
+        titles[0] = "The Book";
+        parameters.setTitles(titles);
+        return parameters;
     }
 
     private BookDto bookDtoConstructor(
